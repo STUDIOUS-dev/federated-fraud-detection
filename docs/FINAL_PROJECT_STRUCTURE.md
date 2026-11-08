@@ -3,6 +3,7 @@
 ```text
 .
 ├── configs/             # YAML configurations defining FL hyperparameters, neural network sizes, and data generation seeds
+├── scripts/            # Helper scripts (run all experiments, acceptance tests, report)
 ├── docs/                # Project documentation, checklists, runbooks, and product guides
 ├── results/             # Validated outputs, JSONL summary metrics, and frozen PyTorch checkpoints
 ├── src/                 # Main source code directory

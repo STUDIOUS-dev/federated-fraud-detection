@@ -15,8 +15,12 @@ def class_weight(y: np.ndarray) -> float:
 def train_local(
     initial_state: list[np.ndarray], X: np.ndarray, y: np.ndarray,
     n_features: int, hidden_dim: int, dropout: float, lr: float,
-    local_epochs: int, batch_size: int, prox_mu: float = 0.0,
+    local_epochs: int, batch_size: int, prox_mu: float = 0.0, seed: int | None = None,
 ) -> tuple[list[np.ndarray], int]:
+    gen = None
+    if seed is not None:
+        torch.manual_seed(seed)  # dropout masks
+        gen = torch.Generator().manual_seed(seed)  # shuffle order
     model = FraudMLP(n_features, hidden_dim, dropout)
     numpy_to_state(model, initial_state)
     model.train()
@@ -26,7 +30,7 @@ def train_local(
     global_params = [p.detach().clone() for p in model.parameters()]
 
     ds = TensorDataset(torch.from_numpy(X), torch.from_numpy(y))
-    loader = DataLoader(ds, batch_size=batch_size, shuffle=True)
+    loader = DataLoader(ds, batch_size=batch_size, shuffle=True, generator=gen)
     for _ in range(local_epochs):
         for xb, yb in loader:
             optimizer.zero_grad()

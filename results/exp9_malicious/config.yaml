@@ -1,4 +1,5 @@
 aggregation: FedAvg
+attack: scale
 batch_size: 256
 client_sizes: null
 clients: 4
@@ -12,9 +13,11 @@ hidden_dim: 32
 local_epochs: 2
 lr: 0.001
 malicious_client_index: 3
+malicious_clients: null
 n_customers_per_bank: 500
 per_client_eval: true
 rounds: 5
 seed: 42
 test_fraction: 0.2
 transactions_per_customer: 40
+trim_beta: 0.25

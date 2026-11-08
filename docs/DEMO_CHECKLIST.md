@@ -33,4 +33,4 @@
 
 ## Backup Assets
 - [ ] Pre-captured screenshots of the dashboard are available (Recommended).
-- [ ] Final report generation script (`scratch/generate_final_report.py`) runs successfully as a fallback.
+- [ ] Final report generation script (`scripts/generate_final_report.py`) runs successfully as a fallback.
