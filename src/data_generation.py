@@ -6,7 +6,11 @@ import pandas as pd
 from .config import BANK_PROFILES, Config
 def generate_bank_transactions(bank_id: str, cfg: Config) -> pd.DataFrame:
     if cfg.heterogeneity == "iid":
-        profile = {"name": "Standardized", "amount_scale": 1.0, "tx_rate": 1.0, "fraud_rate": 0.010}
+        # IID: every bank shares one identical profile equal to the mean of the real profiles,
+        # so only the cross-bank distribution differs from the default setting.
+        profs = list(BANK_PROFILES.values())
+        profile = {"name": "Standardized",
+                   **{k: float(np.mean([q[k] for q in profs])) for k in ("amount_scale", "tx_rate", "fraud_rate")}}
     else:
         profile = BANK_PROFILES[bank_id]
         

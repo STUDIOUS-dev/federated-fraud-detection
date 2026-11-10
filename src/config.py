@@ -37,6 +37,15 @@ class Config:
     client_sizes: list[int] | None = None
     dropout_rate: float = 0.0
     malicious_client_index: int = -1
+    # Phase C additions (all optional / backwards compatible)
+    malicious_clients: list[int] | None = None   # overrides malicious_client_index when set
+    attack: str = "scale"                        # scale | signflip | labelflip
+    trim_beta: float = 0.25                      # FedTrimmedAvg trim fraction per side
+
+    def malicious_set(self) -> set[int]:
+        if self.malicious_clients:
+            return set(self.malicious_clients)
+        return {self.malicious_client_index} if self.malicious_client_index >= 0 else set()
 
 def load_config(config_path: str = "configs/default.yaml") -> Config:
     with open(config_path, "r") as f:
@@ -65,6 +74,9 @@ def load_config(config_path: str = "configs/default.yaml") -> Config:
         client_sizes=raw["data"].get("client_sizes", None),
         dropout_rate=raw["federated"].get("dropout_rate", 0.0),
         malicious_client_index=raw["federated"].get("malicious_client_index", -1),
+        malicious_clients=raw["federated"].get("malicious_clients", None),
+        attack=raw["federated"].get("attack", "scale"),
+        trim_beta=raw["federated"].get("trim_beta", 0.25),
         
         global_eval=raw["evaluation"]["global_eval"],
         per_client_eval=raw["evaluation"]["per_client_eval"],

@@ -50,10 +50,10 @@ Here is how I structured the final repository:
 ├── data/                # Data generation output (local-only/ignored)
 ├── docs/                # Project documentation and guides
 ├── results/             # Validated outputs, final metrics, and frozen checkpoints
-├── scratch/             # Scratch scripts (local-only/ignored)
+├── scripts/             # Helper scripts: run all experiments, acceptance/smoke tests, report generator
 ├── src/
 │   ├── app/             # Streamlit dashboard pages and state
-│   ├── experiments/     # Reproducible FL scripts (Exp 1-10)
+│   ├── experiments/     # Reproducible FL scripts (Exp 1-10, multi-seed `study.py`)
 │   ├── federated/       # Flower clients and custom strategies (FedAvg, FedProx, FedMedian)
 │   └── services/        # Abstraction layer mapping core FL to UI components
 ├── tests/               # Pytest suite
@@ -92,47 +92,47 @@ python -m pytest -v
 ```
 
 ## Research Experiments
-I have already run all the core research experiments, and their final metrics and model checkpoints are stored in the `results/` directory. The Streamlit dashboard reads directly from these frozen artifacts. 
-If you want to fully reproduce one of my experiments (for example, the FedProx run), you can execute:
+The original ten experiments (`src/experiments/exp1_*` ... `exp10_*`) are single-seed (seed 42) demonstrations; their outputs and model checkpoints are in `results/` and are what the dashboard shows. To regenerate all of them (takes ~20 minutes; Flower + Ray):
 ```bash
-python -m src.experiments.exp4_fedprox
+python scripts/run_all_experiments.py
+python -m src.experiments.exp4_fedprox     # or one at a time
+```
+
+Because single seeds are noisy (the test pool has only ~53 fraud cases), the headline results come from a **multi-seed study**: 38 scenarios x 5 seeds, every scenario scored on the same reference test pool. It uses an in-process runner that drives the same clients and strategies as Flower (and reproduces the Flower/Ray result exactly), so it finishes in about an hour instead of many.
+```bash
+python -m src.experiments.study                 # resumable; writes results/study/ and docs/STUDY_RESULTS.md
+python -m src.experiments.study --only attack   # a subset (regex on scenario name)
+python -m src.experiments.study --report-only   # rebuild the report from results/study/runs.jsonl
 ```
 
 ## Final Results
-These are the benchmark results I obtained after running the baseline and federated configurations:
+Global PR-AUC, mean ± std over 5 seeds (full tables, per-bank results and paired tests: [docs/STUDY_RESULTS.md](docs/STUDY_RESULTS.md)):
 
-| Configuration | PR-AUC |
-|---|---:|
-| Centralized | 0.2508 |
-| FedAvg | 0.2439 |
-| FedProx | 0.2456 |
-| IID | 0.2120 |
-| Unequal Sizes | 0.4077 |
-| Class Imbalance | 0.3089 |
-| Dropout | 0.2478 |
-| Poisoned FedAvg | 0.0036 |
-| Poisoned FedMedian | 0.2435 |
+| Configuration | PR-AUC | Recall @ 1% FPR |
+|---|---:|---:|
+| Centralized | 0.309 ± 0.075 | 0.378 ± 0.064 |
+| Local-only (avg) | 0.292 ± 0.070 | 0.374 ± 0.073 |
+| FedAvg | 0.300 ± 0.069 | 0.379 ± 0.076 |
+| FedProx (mu=0.01) | 0.300 ± 0.069 | 0.379 ± 0.076 |
+| FedAvg, 1 of 4 clients scaling weights x -10 | 0.098 ± 0.130 | |
+| FedMedian, same attacker | 0.300 ± 0.070 | |
 
-I observed that clean FedAvg performed closely to the centralized reference baseline. However, when I introduced a malicious client (Poisoned FedAvg), the model collapsed. Switching the aggregation strategy to FedMedian substantially reduced the impact of the poisoned client under the tested configuration.
+What the data supports:
+- Federation matches pooling the data and beats isolated training by a small, consistent margin (+0.008 PR-AUC, 5/5 seeds); the gain is large for banks with little data or fraud (+0.07 PR-AUC in the extreme-imbalance scenario).
+- IID vs non-IID data, FedProx (mu up to 0.1) and client dropout (up to 50%) made no measurable difference in this synthetic setting.
+- FedAvg is clearly vulnerable to a weight-scaling attacker; FedMedian, trimmed mean and Krum all neutralise one attacker of four. With two of four malicious, median and trimmed mean fail; Krum survives only under favourable assumptions (see the caveats in the study report).
+- Absolute accuracy is modest (F1 about 0.04 at threshold 0.5) because the synthetic fraud signal is weak.
 
 ## Explainability
-I integrated SHAP (SHapley Additive exPlanations) to help interpret the model's predictions. The SHAP module provides localized feature attribution, which allows the dashboard to generate human-readable explanations of which transaction features contributed most to the model's fraud probability score. The dashboard generates these explanations without requiring access to the original raw training dataset during inference.
+SHAP provides localized feature attribution, which allows the dashboard to generate human-readable explanations of which transaction features contributed most to the model's fraud probability score. These are model attributions, not causal explanations.
 
 ## Limitations
-While building this project, I made several scoping decisions. The current limitations are:
-- **Synthetic/controlled data**: The data distribution I used is synthesized, not actual production banking data.
-- **Simulated banks**: The network consists of locally simulated clients rather than physically distributed nodes over a real network.
-- **No Differential Privacy**: I did not implement DP bounding on the weight updates.
-- **No Secure Aggregation**: Cryptographic masking of model updates is absent. Without Secure Aggregation, model updates are not cryptographically protected against inference attacks such as gradient inversion.
-- **Limited attack coverage**: I only tested the model's robustness against one specific data-poisoning vector.
-- **No real banking deployment**: This is an offline research simulation, not a production-ready application.
-- **No real network latency/bandwidth evaluation**: Communication overhead was not measured during the simulation.
+- **Synthetic data** with a weak fraud signal and about 53 fraud cases in each test pool; per-bank results are very noisy.
+- **Simulated banks** on one machine; no real network latency or bandwidth measured.
+- **No Differential Privacy** and **no Secure Aggregation**; model updates could leak information (e.g. gradient inversion).
+- **Limited attacks:** three simple, non-adaptive poisoning attacks, at most 2 of 4 clients.
+- Only mild heterogeneity between banks, so null results for IID-ness and FedProx may not carry over to real data.
+- Not a production system.
 
 ## Future Work
-If I were to expand on this project, I would focus on:
-- Implementing **Differential Privacy** to bound information leakage from weight updates.
-- Adding **Secure Aggregation** using cryptographic masking.
-- Scaling the simulation to more clients and evaluating actual communication/latency costs.
-- Testing the architecture against stronger, coordinated Byzantine attacks.
-- Validating the approach against an external, real-world dataset.
-- Implementing communication-efficiency analysis.
+Differential privacy and secure aggregation; adaptive and colluding attackers; real or public benchmark data; communication-cost analysis.

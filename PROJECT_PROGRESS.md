@@ -1,32 +1,30 @@
 # Project Progress
 
 ## Project Status
-FINAL PRODUCT — FROZEN
+v1.1 - research-validity revision (Phases A-C complete). Product and documentation complete; research conclusions revised after multi-seed validation (see `docs/STUDY_RESULTS.md`).
 
 ### Research Status
-Complete
+Complete for the scope below. Headline results are 5-seed means; the ten original experiments are single-seed (seed 42) demonstrations.
 
 ### Product Status
 Complete
 
 ### Documentation Status
-Complete
+Complete (reconciled with the multi-seed study on 2026-11-08)
 
 ### Demo Status
 Ready
-
 
 ## Project Objective
 Simulate multiple independent banks collaboratively training a fraud-detection model without sharing raw customer transaction data. Investigate how effectively FL improves fraud detection across heterogeneous financial institutions and its robustness under realistic conditions.
 
 ## Current Architecture
-The starter repository provides a solid foundation:
-- Synthetic transaction generation (`data_generation.py`)
-- Causal feature engineering without target leakage (`feature_engineering.py`)
-- Basic ML preprocessing and temporal splitting (`preprocessing.py`)
-- PyTorch tabular MLP (`model.py`)
-- Deterministic, manual FL simulation (`federated.py`, `run_baseline.py`)
-- Evaluation metrics (`evaluation.py`)
+- Synthetic transaction generation (`data_generation.py`), causal features (`feature_engineering.py`), temporal split (`preprocessing.py`)
+- PyTorch tabular MLP (`model.py`), metrics (`evaluation.py`: PR-AUC, ROC-AUC, recall at 1% FPR, F1/precision/recall at 0.5)
+- Flower federated layer (`src/federated/`): clients (honest + 3 attack types), tracked strategies (FedAvg, FedProx via client term, FedMedian, FedTrimmedAvg, Krum) with seeded client dropout
+- Experiment framework (`src/experiments/framework.py`): shared reference test pool for all scenarios, fully seeded training, Flower/Ray runner and a Ray-free in-process runner
+- Multi-seed study (`src/experiments/study.py`, `study_report.py`) -> `results/study/`, `docs/STUDY_RESULTS.md`
+- Services + Streamlit app (`src/services/`, `src/app/`, `src/dashboard.py`); helper scripts in `scripts/`
 
 ## Technology Stack
 - Core: Python, NumPy, Pandas, Scikit-learn
@@ -53,7 +51,7 @@ Tasks:
 Completed: All
 Remaining: None
 Tests: 8 tests written and passing (`test_data_generation.py`, `test_preprocessing.py`, `test_model.py`).
-Results: Centralized model reaches ~0.38 PR-AUC globally. Local models vary significantly due to heterogeneity (0.26 to 0.67 PR-AUC).
+Results: superseded. Early figures came from unseeded single runs on a different test pool; see Final Results and `docs/STUDY_RESULTS.md`.
 Issues: Found and fixed incorrect package imports affecting `pytest`.
 
 ### Milestone 2: Flower FL Integration (FedAvg & FedProx)
@@ -69,8 +67,7 @@ Completed: All
 Remaining: None
 Tests: 13/13 tests pass. New tests for `flwr` serialization, state mutations, strategy metrics tracking.
 Results: 
-- FedAvg (Exp 3): PR-AUC ~0.35, F1 ~0.06
-- FedProx (Exp 4, μ=0.01): PR-AUC ~0.36, F1 ~0.06
+- Superseded by the multi-seed study: FedAvg and FedProx (mu=0.01) are indistinguishable (PR-AUC 0.300 +/- 0.069 for both).
 - Config: 4 clients, 5 rounds, 2 local epochs, defaults
 Issues: `flwr[simulation]` required installing `ray`, which had dependency resolution conflicts with `protobuf`. Fixed via `--ignore-installed` and isolating Ray installation.
 
@@ -78,42 +75,42 @@ Issues: `flwr[simulation]` required installing `ray`, which had dependency resol
 Status: Completed
 Objective: Implement configurable IID / Non-IID splits and client sizing (Exp 5 & 6) and class imbalance/dropout/malicious experiments (Exp 7-9).
 Completed: All 5 experiments completed with unified test framework.
-Results:
-- Exp 5 (IID): PR-AUC ~0.21. Shows how data distribution impacts the baseline (baseline non-IID FedAvg was ~0.35).
-- Exp 6 (Sizes): PR-AUC ~0.41 globally. The largest bank (Bank C) dominates the update, getting ~0.58 locally, but smaller banks suffer (~0.08 PR-AUC).
-- Exp 7 (Imbalance): Global PR-AUC ~0.31. Bank A (zero fraud in local data) evaluates to 0.0, showing the federated model couldn't fully transfer knowledge to it under this extreme imbalance.
-- Exp 8 (Dropout): Global PR-AUC ~0.24. Model converges but struggles due to dropping high-value clients during rounds.
-- Exp 9 (Malicious): Global PR-AUC ~0.003. Total collapse; malicious gradient scaling successfully poisons the shared model.
+Results: superseded by the multi-seed study (`docs/STUDY_RESULTS.md`). Earlier single-run readings (e.g. 'Exp 9 total collapse', 'small banks suffer') did not hold up across seeds or used non-comparable test pools.
 
 ### Milestone 4: Advanced Scenarios & Explainability
-Status: Not Started
-Objective: Implement Should Have and Optional features (dropout, SHAP, Dashboard, malicious clients).
+Status: Completed
+Objective: Robust defence (FedMedian), SHAP explainability, Streamlit dashboard. Delivered 2026-09-15.
 
 ## Module Status
 
 | Module | Status | Tests | Notes |
 |---|---|---|---|
-| `data_generation` | Working Draft | Missing | Generates basic synthetic data |
-| `feature_engineering` | Working Draft | Partial | Causal features working |
-| `preprocessing` | Working Draft | Missing | Standard scaling & splitting |
-| `model` | Working Draft | Missing | PyTorch MLP |
-| `federated` | Working Draft | Missing | Manual simulation |
-| `evaluation` | Working Draft | Missing | Basic metrics |
+| `data_generation` | Complete | Yes | Synthetic banks; IID profile = mean of bank profiles |
+| `feature_engineering` | Complete | Yes | Causal features |
+| `preprocessing` | Complete | Yes | Scaling, temporal split |
+| `model` | Complete | Yes | PyTorch MLP |
+| `federated` | Complete | Yes | Flower clients/strategies, attacks, seeded dropout |
+| `evaluation` | Complete | Yes | Adds ROC-AUC, recall@1% FPR |
+| `experiments` (framework, study) | Complete | Yes | Shared test pool, in-process runner, multi-seed study |
+| services / app | Complete | Yes | Dashboard reads frozen results and study aggregate |
 
 ## Experiments
 
-| Priority | Experiment | Status | Result | Notes |
-|---|---|---|---|---|
-| Must | 1. Centralized baseline | Completed | ~0.38 PR-AUC | Results saved in `results/exp1_centralized` |
-| Must | 2. Local-only models | Completed | 0.26 - 0.67 PR-AUC | High variance between clients; Results in `results/exp2_local` |
-| Must | 3. FedAvg | Completed | ~0.35 PR-AUC | Results saved in `results/exp3_fedavg` |
-| Must | 4. FedProx | Completed | ~0.36 PR-AUC | Results saved in `results/exp4_fedprox` (mu=0.01) |
-| Must | 5. IID vs Non-IID | Completed | ~0.21 PR-AUC | Results in `results/exp5_iid` |
-| Must | 6. Unequal client sizes | Completed | ~0.41 PR-AUC | Results in `results/exp6_sizes`. Large clients dominate. |
-| Must | 7. Class imbalance | Completed | ~0.31 PR-AUC | Results in `results/exp7_imbalance`. |
-| Should | 8. Client dropout | Completed | ~0.24 PR-AUC | Results in `results/exp8_dropout`. |
-| Optional | 9. Malicious client | Completed | ~0.003 PR-AUC | Global model poisoned with manipulated model updates. Results in `results/exp9_malicious`. |
-| Optional | 10. Robust Defense | Completed | ~0.247 PR-AUC | FedMedian recovery from poisoning. `results/exp10_defense`. |
+Single-seed (seed 42) results of the ten original experiments are in `results/<exp>/` and `results/summary.jsonl`. Use `docs/STUDY_RESULTS.md` (5 seeds) for any comparison.
+
+| Priority | Experiment | Status | Notes |
+|---|---|---|---|
+| Must | 1. Centralized baseline | Completed | `results/exp1_centralized` |
+| Must | 2. Local-only models | Completed | `results/exp2_local` |
+| Must | 3. FedAvg | Completed | `results/exp3_fedavg` |
+| Must | 4. FedProx (mu=0.01) | Completed | `results/exp4_fedprox`; mu sweep 0.01/0.1/1.0 in the study |
+| Must | 5. IID vs Non-IID | Completed | `results/exp5_iid` |
+| Must | 6. Unequal client sizes | Completed | `results/exp6_sizes` |
+| Must | 7. Class imbalance | Completed | `results/exp7_imbalance` |
+| Should | 8. Client dropout | Completed | Now genuine per-round dropout (p=0.5); previously random client sampling |
+| Optional | 9. Malicious client (weight scaling, bank_d) | Completed | `results/exp9_malicious` |
+| Optional | 10. FedMedian defence (same attacker) | Completed | `results/exp10_defense`; previously used a different attacker than Exp 9 |
+| Added | 11. Multi-seed study | Completed | 38 scenarios x 5 seeds: sweeps, 3 attacks, 4 aggregators, 1-2 attackers |
 
 ## Research Validity Checks (Phase 3)
 - **Temporal causality**: Confirmed. `temporal_split` rigidly divides by timestamp; no future information influences the model.
@@ -128,7 +125,7 @@ Objective: Implement Should Have and Optional features (dropout, SHAP, Dashboard
 
 
 ## Results
-N/A
+See Final Quantitative Results below and `docs/STUDY_RESULTS.md`.
 
 ## Technical Decisions
 - Preserve existing working behavior before refactoring.
@@ -139,17 +136,16 @@ N/A
 - Class-weighted loss for imbalance.
 - Strict temporal causality in features.
 
-## Research Conclusions (Phase 10)
-Based on the experiments, the results suggest:
-1. **Did federation improve over local-only training?** Yes, under the tested configuration, federated strategies (FedAvg/FedProx) generalized better than models trained purely on isolated local data.
-2. **Under which client distributions?** FL thrived particularly under IID scenarios but maintained critical viability under Non-IID constraints where local models severely degraded.
-3. **What happened under strong heterogeneity?** Non-IID distributions induced parameter drift, resulting in slight degradation of global convergence. FedProx mitigated this drift partially.
-4. **Did unequal client sizes disadvantage smaller banks?** The results indicate that sample-count-weighted FedAvg biased the global boundary heavily toward large banks. Smaller banks received a model optimized for the majority, which may not suit distinct local minority patterns.
-5. **How much did dropout affect the model?** Client dropout slowed convergence and reduced final PR-AUC, suggesting the need for either more rounds or over-provisioning participants.
-6. **How vulnerable was FedAvg to poisoning?** Extremely vulnerable. A single malicious client performing manipulated model updates was able to virtually destroy the global model's predictive ability.
-7. **How much did FedMedian mitigate the attack?** FedMedian substantially mitigated the effect of the poisoned client under the tested configuration, recovering the global PR-AUC back to baseline equivalence.
-8. **What do the explainability results add?** SHAP analysis indicates that model attribution (e.g., transaction amounts and missing history) remains highly transparent and locally auditable, despite raw data never being centrally pooled.
-9. **What limitations remain?** The project lacks Differential Privacy and Secure Aggregation, meaning gradient inversion attacks could theoretically leak features. Additionally, the network simulation does not evaluate actual bandwidth or latency costs.
+## Research Conclusions (revised 2026-11-08, 5-seed study)
+1. **Did federation improve over local-only training?** Slightly. +0.008 PR-AUC (5/5 seeds) but no gain in recall at a fixed 1% false-positive rate. It matches pooled-data training (-0.009, not significant). The earlier 'FL generalized better than local' claim rested on one seed.
+2. **Does it help more for weak banks?** Yes: unequal sizes +0.032 PR-AUC, extreme imbalance +0.069 PR-AUC over local training (the 10-customer bank goes from 0.04 to 0.31).
+3. **IID vs strong heterogeneity / FedProx?** No measurable difference; the synthetic banks are only mildly heterogeneous. FedProx mu <= 0.1 equals FedAvg; mu=1.0 is slightly worse (not significant).
+4. **Did unequal sizes disadvantage small banks?** Not supported: small banks gained relative to training alone.
+5. **Dropout?** No measurable effect at 25% or 50% with 5 rounds.
+6. **Poisoning of FedAvg?** Weight scaling by -10 from one of four clients hurts badly but bimodally across seeds (0.098 +/- 0.130). Sign-flip and label-flip were ineffective at these settings.
+7. **Defences?** FedMedian, FedTrimmedAvg and Krum all neutralise one attacker at no measurable cost. With two of four attackers median and trimmed mean fail; Krum survives only under favourable, non-adaptive conditions.
+8. **Explainability?** SHAP gives model-attribution explanations of individual predictions (not causal).
+9. **Limitations:** synthetic data with ~53 test fraud cases per seed, no DP / secure aggregation, simple non-adaptive attacks, absolute accuracy modest (F1 ~0.04 at threshold 0.5).
 
 ## Final Product Build
 
@@ -181,15 +177,15 @@ Track:
 - [x] Validation
 
 ## Next Steps
-- Begin Phase 3: Final Product Validation.
+- Optional extensions (Phase E): differential privacy, secure aggregation, communication cost, real or public benchmark data, adaptive attackers.
 
 ## Demo Readiness
 **Status:** READY
 
 **Validated Commands:**
-- Test Suite: `python -m pytest -v` (19/19 passed)
+- Test Suite: `python -m pytest -v`
 - Dashboard: `streamlit run src/dashboard.py` (Validated in headless mode)
-- Fallback Report: `python scratch/generate_final_report.py`
+- Fallback Report: `python scripts/generate_final_report.py`
 
 **Exact Artifact Paths:**
 - Dashboard entry: `src/dashboard.py`
@@ -212,6 +208,11 @@ Track:
 - Streamlit cache state issues if files are modified during runtime.
 
 ## Change Log
+- 2026-11-08: Phases A-C (research-validity revision).
+  - A: reconciled README, report, progress file, runbook, release notes with measured results; `scratch/` -> tracked `scripts/`.
+  - B: fully seeded training and initialisation (repeat runs bit-identical); shared reference test pool for all scenarios; 5-seed study with mean +/- std and paired comparisons; Ray-free in-process runner verified equal to Flower/Ray.
+  - C: real client dropout; IID defined as mean bank profile; FedProx mu sweep; sign-flip / label-flip attacks and multi-attacker support; FedTrimmedAvg and Krum; ROC-AUC and recall@1% FPR; exp10 now uses the same attacker as exp9; exp4 now really runs mu=0.01; case-insensitive aggregation names.
+  - Re-ran exp1-exp10 (single-seed numbers changed vs v1.0 because of the shared test pool and seeding).
 - 2026-09-23: Corrected technical terminology and claims in `FINAL_REPORT.md` and `PROJECT_PROGRESS.md` (Step 2 - Final Report Refinement).
 - 2026-09-15: Completed Milestone 4 (Robust Defense, Explainability, Dashboard).
   - Implemented `FedMedian` defense which mitigated manipulated model updates.
@@ -239,41 +240,37 @@ Track:
 - 2026-09-14: Updated implementation plan with reusable experiment framework and prioritization based on feedback. Started Milestone 1.
 
 ## Final Quantitative Results
+
+### Headline: multi-seed study
+Mean +/- std over 5 seeds, shared reference test pool: see `docs/STUDY_RESULTS.md`. Key rows (PR-AUC): Centralized 0.309 +/- 0.075, Local 0.292 +/- 0.070, FedAvg 0.300 +/- 0.069, FedProx 0.300 +/- 0.069; FedAvg with one scaling attacker 0.098 +/- 0.130, FedMedian with the same attacker 0.300 +/- 0.070.
+
 ### Reproducibility Check (exp5_iid)
-Run 1 PR-AUC: 0.21493195418274605
-Run 2 PR-AUC: 0.21203151267933462
+Run 1 PR-AUC: 0.24650818546984377
+Run 2 PR-AUC: 0.24650818546984377 (identical: training is fully seeded)
 
+### Single-seed demonstration runs (seed 42, `results/summary.jsonl`)
+Noise between seeds is larger than most differences in this table; do not rank rows by it.
 
-### Final Results Table
-
-| Setup | Global PR-AUC | F1 | Precision | Recall |
-|---|---|---|---|---|
-| Centralized | 0.2508 | 0.0414 | 0.0216 | 0.4906 |
-| Local Average | 0.2447 | 0.0320 | 0.0166 | 0.4858 |
-| Unequal Sizes | 0.4077 | 0.1127 | 0.0623 | 0.5854 |
-| Class Imbalance | 0.3089 | 0.0543 | 0.0287 | 0.5000 |
-| Dropout | 0.2478 | 0.0376 | 0.0196 | 0.4717 |
-| Poisoned FedAvg | 0.0036 | 0.0000 | nan | 0.0000 |
-| Poisoned FedMedian | 0.2435 | 0.0413 | 0.0214 | 0.5660 |
-| IID | 0.2120 | 0.0437 | 0.0228 | 0.5167 |
-| FedAvg | 0.2439 | 0.0445 | 0.0234 | 0.4717 |
-| FedProx | 0.2456 | 0.0437 | 0.0229 | 0.4906 |
-
-
-### Validating FedMedian Result Carefully
-* clean FedAvg PR-AUC: 0.2439
-* poisoned FedAvg PR-AUC: 0.0036
-* poisoned FedMedian PR-AUC: 0.2435
-* absolute degradation: 0.2403
-* recovery amount: 0.2400
+| Setup | PR-AUC | Recall@1%FPR | F1 | Precision | Recall |
+|---|---|---|---|---|---|
+| Centralized | 0.2525 | 0.3208 | 0.0383 | 0.0200 | 0.4528 |
+| Local Average | 0.2388 | 0.3113 | 0.0305 | 0.0160 | 0.5236 |
+| FedAvg | 0.2480 | 0.3019 | 0.0388 | 0.0201 | 0.5283 |
+| FedProx (mu=0.01) | 0.2483 | 0.3019 | 0.0387 | 0.0201 | 0.5283 |
+| IID | 0.2465 | 0.3208 | 0.0529 | 0.0280 | 0.4717 |
+| Unequal Sizes | 0.2423 | 0.3019 | 0.0934 | 0.0537 | 0.3585 |
+| Class Imbalance | 0.2474 | 0.3019 | 0.0472 | 0.0249 | 0.4717 |
+| Dropout (p=0.5) | 0.2471 | 0.3019 | 0.0289 | 0.0148 | 0.5283 |
+| Poisoned FedAvg (scale x-10) | 0.0064 | 0.0566 | 0.0000 | nan | 0.0000 |
+| Poisoned FedMedian | 0.2498 | 0.3208 | 0.0451 | 0.0236 | 0.5094 |
 
 ## Final Product Validation
 
 - **Page-by-page validation**: Completed successfully using Streamlit AppTest. All pages initialize correctly without exceptions, and optional missing data is handled gracefully.
 - **Transaction Analyzer validation**: Completed. Selected a held-out test transaction, applied the expected 14-dimensional feature schema, loaded the frozen model, successfully executed inference, and retrieved the target label.
 - **SHAP validation**: Completed. Verified that SHAP uses exactly the same input model and produces correctly dimensioned attribution matching the model prediction (model attribution, not causal). Human-readable explanation generation works.
-- **Robustness validation**: Completed. Verified UI displays the explicitly requested frozen values (Clean FedAvg 0.2439, Poisoned FedAvg 0.0036, Poisoned FedMedian 0.2435).
+- **Robustness validation**: Completed. Robustness page now reads values from results/summary.jsonl (no hard-coded fallbacks) and shows the multi-seed table.
 - **Documentation validation**: Completed. All required documentation files (README, FINAL_PRODUCT_GUIDE, DEMO_RUNBOOK, DEMO_CHECKLIST, FINAL_PRODUCT_PLAN) are present and describe the current architecture.
-- **Final test count**: 29/29 tests passing (100%).
+- **Final test count**: 48/48 tests passing (100%) after the 2026-11-08 revision.
 - **Final status**: FINAL PRODUCT READY
 

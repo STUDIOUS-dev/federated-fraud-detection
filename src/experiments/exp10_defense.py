@@ -9,7 +9,7 @@ def main():
     print("Running Experiment 10: Malicious Client Defense (FedMedian)...")
     config_overrides = {
         "aggregation": "FedMedian",
-        "malicious_client_index": 0  # Same attacker as Exp 9
+        "malicious_client_index": 3  # Same attacker (bank_d) as Exp 9
     }
     run_fl_experiment("exp10_defense", config_overrides)
 

@@ -33,12 +33,12 @@ streamlit run src/dashboard.py
 ### 1. Project Overview & Centralized Baseline (1 min)
 - **Action**: Open the **Overview** tab.
 - **Show**: The latest experiment metrics and the table of all experiments.
-- **Talking Point**: "Welcome to our Federated Fraud Detection project. We simulated four heterogeneous banks (A, B, C, D). Initially, if we pooled all their data into a Centralized model, we achieved a PR-AUC of **0.2508**. Our goal is to see if we can match this using Federated Learning without sharing raw data."
+- **Talking Point**: "Welcome to our Federated Fraud Detection project. We simulated four heterogeneous banks (A, B, C, D). Initially, if we pooled all their data into a Centralized model, we achieved a PR-AUC of **0.2525** (seed 42; 5-seed mean 0.309 ± 0.075). Our goal is to see if we can match this using Federated Learning without sharing raw data."
 
 ### 2. Federated Learning Workflow & Clean FedAvg (1 min)
 - **Action**: Go to the **FL Training** tab. Select `exp3_fedavg` from the dropdown.
 - **Show**: The Global PR-AUC over Rounds chart.
-- **Talking Point**: "Here is our standard Federated Averaging (FedAvg) training over 5 rounds. We reach a global PR-AUC of **0.2439**, which is highly comparable to the centralized baseline. The banks collaborate effectively while maintaining data privacy."
+- **Talking Point**: "Here is our standard Federated Averaging (FedAvg) training over 5 rounds. We reach a global PR-AUC of **0.2480** (seed 42; 5-seed mean 0.300 ± 0.069), statistically indistinguishable from the centralized baseline. The banks collaborate effectively while maintaining data privacy."
 
 ### 3. Client Heterogeneity (1 min)
 - **Action**: Go to the **Client/Heterogeneity** tab.
@@ -48,8 +48,8 @@ streamlit run src/dashboard.py
 ### 4. Poisoned FedAvg vs FedMedian Mitigation (2 mins)
 - **Action**: Go to the **Robustness** tab.
 - **Show**: The comparison chart between `exp3_fedavg`, `exp9_malicious`, and `exp10_defense`.
-- **Talking Point**: "What happens if a bank is compromised? We introduced a malicious client that sends inverted model weights (Poisoned FedAvg). The global PR-AUC collapses from 0.2439 to **0.0036**. 
-To mitigate this, we deployed **FedMedian**, a robust aggregation strategy. As you can see, FedMedian successfully ignores the poisoned updates and recovers the performance back to **0.2435**."
+- **Talking Point**: "What happens if a bank is compromised? We introduced a malicious client that sends inverted model weights (Poisoned FedAvg). The global PR-AUC collapses from 0.2480 to **0.0064** in this seed-42 run (across 5 seeds it is bimodal: 0.098 ± 0.130). 
+To mitigate this, we deployed **FedMedian**, a robust aggregation strategy. As you can see, FedMedian successfully ignores the poisoned updates and recovers the performance to **0.2498** (5-seed mean 0.300)."
 
 ### 5. Explainability with SHAP (1.5 mins)
 - **Action**: Go to the **Explainability (SHAP)** tab. Move the transaction index slider.
@@ -57,20 +57,22 @@ To mitigate this, we deployed **FedMedian**, a robust aggregation strategy. As y
 - **Talking Point**: "Finally, in the financial sector, black-box models aren't enough. We integrated SHAP to explain individual transaction predictions from our final FedMedian model. For this transaction, the model predicted it as [Fraud/Legitimate], and our human-readable explanation highlights exactly which features (like recent transaction amount or location) drove this decision."
 
 ### 6. Conclusion (0.5 mins)
-- **Talking Point**: "In conclusion, we successfully demonstrated that Federated Learning can match centralized performance for fraud detection, while FedMedian ensures robustness against malicious attacks, and SHAP provides the necessary regulatory transparency."
+- **Talking Point**: "In conclusion, we successfully demonstrated that Federated Learning can match centralized performance for fraud detection, while robust aggregation (FedMedian, trimmed mean, Krum) neutralises a minority of malicious clients (not half of them), and SHAP provides the necessary regulatory transparency."
 
 ---
 
 ## Key Numerical Results (Verified)
-- **Centralized baseline PR-AUC (exp1)**: 0.2508
-- **Clean FedAvg PR-AUC (exp3)**: 0.2439
-- **Poisoned FedAvg PR-AUC (exp9)**: 0.0036
-- **Poisoned FedMedian PR-AUC (exp10)**: 0.2435
+- **Centralized baseline PR-AUC (exp1)**: 0.2525 (seed 42)
+- **Clean FedAvg PR-AUC (exp3)**: 0.2480 (seed 42)
+- **Poisoned FedAvg PR-AUC (exp9)**: 0.0064 (seed 42)
+- **Poisoned FedMedian PR-AUC (exp10)**: 0.2498 (seed 42)
 
 ---
 
 ## Backup Plan
 If the live environment or Streamlit dashboard fails during the demo:
-1. **Fallback 1 (Results)**: Open `scratch/generate_final_report.py` and run it via `python scratch/generate_final_report.py` in the terminal to display the markdown table of results directly in the console.
+1. **Fallback 1 (Results)**: Open `scripts/generate_final_report.py` and run it via `python scripts/generate_final_report.py` in the terminal to display the markdown table of results directly in the console.
 2. **Fallback 2 (Explainability)**: Run a manual python script (or reference `src/explainability.py`) to generate a print-out of the SHAP explanation to show the audience.
 3. **Fallback 3 (Visuals)**: Have pre-captured screenshots of the 5 dashboard tabs saved in a `docs/assets/` folder to present as a slideshow.
+
+**Note for the presenter:** the four numbers above are single-seed (seed 42) demonstration runs. Quote the 5-seed means from `docs/STUDY_RESULTS.md` if asked about statistical strength; single-seed gaps between rows are mostly noise.
