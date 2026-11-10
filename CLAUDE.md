@@ -14,7 +14,8 @@ Run everything from the repo root (imports are `src.*`, results paths are relati
 pip install -r requirements.txt          # flwr simulation needs Ray; if protobuf conflicts: pip install "ray[default]"
 python -m pytest -v                      # full suite
 python -m pytest tests/test_federated.py::test_flower_client_serialization -v   # single test
-streamlit run src/dashboard.py           # dashboard
+streamlit run src/dashboard.py           # dashboard (adds repo root to sys.path itself)
+uvicorn src.api:app --port 8000          # scoring API: GET /health, POST /score {transactions:[14 features], threshold, explain}
 python -m src.experiments.exp4_fedprox   # run one experiment (exp1..exp10); writes to results/<exp_name>/
 ```
 
