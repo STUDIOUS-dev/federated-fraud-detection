@@ -2,6 +2,32 @@ import streamlit as st
 import pandas as pd
 from src.app.state import get_state, set_state
 
+def score_uploaded(mod_svc, df: pd.DataFrame) -> pd.DataFrame:
+    """Scores an uploaded frame that already contains the model's input features."""
+    from src.feature_engineering import BASE_FEATURES
+    missing = [f for f in BASE_FEATURES if f not in df.columns]
+    if missing:
+        raise ValueError(f"Missing required columns: {missing}")
+    out = df.copy()
+    out["fraud_probability"] = mod_svc.predict_proba(df.copy())
+    out["predicted"] = (out["fraud_probability"] >= 0.5).astype(int)
+    return out
+
+
+def render_upload(mod_svc):
+    from src.feature_engineering import BASE_FEATURES
+    st.subheader("Score your own transactions (CSV)")
+    st.caption("Required columns (already-engineered features): " + ", ".join(BASE_FEATURES))
+    up = st.file_uploader("Upload CSV", type="csv")
+    if up is not None:
+        try:
+            res = score_uploaded(mod_svc, pd.read_csv(up))
+            st.dataframe(res, use_container_width=True)
+            st.download_button("Download scored CSV", res.to_csv(index=False), "scored.csv", "text/csv")
+        except Exception as e:
+            st.error(f"Could not score file: {e}")
+
+
 def render(res_svc, mod_svc, exp_svc):
     st.header("Transaction Analyzer")
     
@@ -60,3 +86,6 @@ def render(res_svc, mod_svc, exp_svc):
             
     except Exception as e:
         st.error(f"Error loading transaction data: {e}")
+
+    st.divider()
+    render_upload(mod_svc)

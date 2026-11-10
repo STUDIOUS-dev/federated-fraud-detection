@@ -1,3 +1,11 @@
+import sys
+from pathlib import Path
+
+# Make `src.*` importable when launched as `streamlit run src/dashboard.py`
+_ROOT = str(Path(__file__).resolve().parent.parent)
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+
 import streamlit as st
 from src.app.state import init_app_state, get_state, set_state
 from src.services.results import ResultsService
@@ -46,6 +54,7 @@ from src.app.pages import (
     model_performance,
     robustness,
     transaction_analyzer,
+    live_stream,
     explainability,
     project_info
 )
@@ -57,6 +66,7 @@ PAGES = {
     "Model Performance": model_performance.render,
     "Robustness": robustness.render,
     "Transaction Analyzer": transaction_analyzer.render,
+    "Live Stream": live_stream.render,
     "Explainability": explainability.render,
     "Project Information": project_info.render,
 }
