@@ -1,5 +1,15 @@
 # Privacy-Aware & Explainable Federated Fraud Detection
 
+[![tests](https://github.com/STUDIOUS-dev/federated-fraud-detection/actions/workflows/tests.yml/badge.svg)](https://github.com/STUDIOUS-dev/federated-fraud-detection/actions/workflows/tests.yml)
+![python](https://img.shields.io/badge/python-3.12-blue) ![license](https://img.shields.io/badge/license-MIT-green)
+
+**TL;DR:** four simulated banks train a fraud model together without sharing raw transactions. Federation matches pooled training; a single poisoned client collapses plain FedAvg (PR-AUC 0.80 -> 0.29 on real credit-card data) while median aggregation holds at 0.81. Includes SHAP explanations, a Streamlit dashboard with a live-stream replay, and a FastAPI scoring service.
+
+| Live Stream replay | Score your own CSV |
+|---|---|
+| ![Live Stream](docs/img/live_stream.png) | ![CSV scoring](docs/img/analyzer.png) |
+| ![Robustness](docs/img/robustness.png) | ![Explainability](docs/img/explainability.png) |
+
 ## Overview
 I built this project to study how federated learning (FL) can be used for fraud detection across heterogeneous banks. My goal was to see if multiple independent financial institutions could collaboratively train a machine learning model while keeping their raw customer transaction data local. 
 
@@ -14,6 +24,10 @@ I implemented and tested several core features throughout this project:
 - **Poisoning experiments**: I introduced a malicious client to study model collapse and robustness under data-poisoning attacks.
 - **SHAP explainability**: I added SHAP to provide human-readable, localized feature attribution for individual transactions.
 - **Streamlit dashboard**: I created an interactive web application to visualize the frozen experiments and dynamically analyze transactions.
+- **Live Stream page**: replays held-out transactions in batches with running alerts, precision and recall.
+- **CSV scoring**: upload engineered-feature transactions in the Transaction Analyzer and download scored results.
+- **Scoring API (FastAPI)**: `POST /score` returns fraud probability, risk level and optional SHAP explanation.
+- **Real-data study**: the same federated comparison on the public OpenML credit-card dataset.
 
 ## Architecture
 ```text
@@ -39,6 +53,8 @@ For the backend architecture, I used PyTorch to build a Tabular Multilayer Perce
 - **Flower (`flwr`)**: Federated learning orchestration
 - **SHAP**: Explainability and feature attribution
 - **Streamlit**: Web dashboard interface
+- **FastAPI / Uvicorn**: Scoring API
+- **Docker** and **GitHub Actions**: container image and CI
 - **Scikit-Learn / Pandas / NumPy**: Data processing and metric evaluation
 - **Pytest**: Automated testing framework
 
@@ -50,10 +66,13 @@ Here is how I structured the final repository:
 ├── data/                # Data generation output (local-only/ignored)
 ├── docs/                # Project documentation and guides
 ├── results/             # Validated outputs, final metrics, and frozen checkpoints
+├── .github/workflows/   # CI (pytest)
+├── Dockerfile           # Scoring API image
 ├── scripts/             # Helper scripts: run all experiments, acceptance/smoke tests, report generator
 ├── src/
 │   ├── app/             # Streamlit dashboard pages and state
 │   ├── experiments/     # Reproducible FL scripts (Exp 1-10, multi-seed `study.py`)
+│   ├── api.py           # FastAPI scoring service
 │   ├── federated/       # Flower clients and custom strategies (FedAvg, FedProx, FedMedian)
 │   └── services/        # Abstraction layer mapping core FL to UI components
 ├── tests/               # Pytest suite
@@ -84,6 +103,15 @@ To launch the interactive demonstration dashboard that I built:
 ```bash
 streamlit run src/dashboard.py
 ```
+
+## Scoring API
+```bash
+uvicorn src.api:app --port 8000      # interactive docs at http://localhost:8000/docs
+```
+```bash
+curl -X POST localhost:8000/score -H "Content-Type: application/json" -d '{"transactions":[{...14 features...}],"explain":true}'
+```
+Each transaction needs the 14 engineered features listed in `src/feature_engineering.py` (`BASE_FEATURES`). Docker: `docker build -t fraud-api . && docker run -p 8000:8000 fraud-api`.
 
 ## Run Tests
 To validate the current integrity of the codebase:
@@ -123,16 +151,32 @@ What the data supports:
 - FedAvg is clearly vulnerable to a weight-scaling attacker; FedMedian, trimmed mean and Krum all neutralise one attacker of four. With two of four malicious, median and trimmed mean fail; Krum survives only under favourable assumptions (see the caveats in the study report).
 - Absolute accuracy is modest (F1 about 0.04 at threshold 0.5) because the synthetic fraud signal is weak.
 
+### Real-data check (OpenML creditcard, 5 seeds, 4 simulated banks)
+Separate from the synthetic study; see [docs/REAL_DATA_RESULTS.md](docs/REAL_DATA_RESULTS.md). Reproduce with `python -m src.experiments.real_data_study` (downloads ~150 MB once).
+
+| Setup | PR-AUC |
+|---|---:|
+| Centralized | 0.798 ± 0.008 |
+| Local-only (avg) | 0.791 ± 0.005 |
+| FedAvg | 0.803 ± 0.010 |
+| FedMedian | 0.806 ± 0.006 |
+| FedAvg + 1 scaling attacker | 0.287 ± 0.272 |
+| FedMedian + 1 scaling attacker | 0.806 ± 0.006 |
+
+The test split has only 75 frauds, so differences between healthy methods are within noise; the attack result is not.
+
 ## Explainability
 SHAP provides localized feature attribution, which allows the dashboard to generate human-readable explanations of which transaction features contributed most to the model's fraud probability score. These are model attributions, not causal explanations.
 
 ## Limitations
-- **Synthetic data** with a weak fraud signal and about 53 fraud cases in each test pool; per-bank results are very noisy.
+- **Synthetic data** in the main study with a weak fraud signal and about 53 fraud cases in each test pool; per-bank results are very noisy.
 - **Simulated banks** on one machine; no real network latency or bandwidth measured.
 - **No Differential Privacy** and **no Secure Aggregation**; model updates could leak information (e.g. gradient inversion).
 - **Limited attacks:** three simple, non-adaptive poisoning attacks, at most 2 of 4 clients.
 - Only mild heterogeneity between banks, so null results for IID-ness and FedProx may not carry over to real data.
+- The real-data "banks" are a random, skewed partition of one public dataset (row order stands in for time), not separate institutions.
+- The API and CSV upload expect already-engineered features; raw transactions need the rolling customer/terminal history computed first.
 - Not a production system.
 
 ## Future Work
-Differential privacy and secure aggregation; adaptive and colluding attackers; real or public benchmark data; communication-cost analysis.
+Differential privacy and secure aggregation; adaptive and colluding attackers; raw-transaction feature pipeline for the API; a dashboard page for the real-data study; communication-cost analysis.
