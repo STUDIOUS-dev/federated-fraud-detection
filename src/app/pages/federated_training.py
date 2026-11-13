@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
-import ast
+from src.app.labels import algorithm_label, is_federated
 
 def render(res_svc, mod_svc, exp_svc):
     st.header("Federated Training")
     
     summary = res_svc.load_summary()
-    exp_names = [r["exp_name"] for r in summary if "fed" in r.get("aggregation", "").lower() or r.get("aggregation") == "FedAvg" or "exp" in r.get("exp_name")]
+    # Baselines exp1/exp2 are not federated runs, so they are excluded here.
+    exp_names = [r["exp_name"] for r in summary if is_federated(r.get("exp_name"))]
     
     if not exp_names:
         st.warning("No federated experiments found in the results.")
@@ -17,7 +18,7 @@ def render(res_svc, mod_svc, exp_svc):
     
     st.markdown("### Training Configuration")
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Algorithm", exp.get("aggregation", "N/A"))
+    c1.metric("Algorithm", algorithm_label(exp))
     c2.metric("Rounds", exp.get("rounds", "N/A"))
     c3.metric("Clients Participating", exp.get("clients", "N/A"))
     c4.metric("Local Epochs", exp.get("local_epochs", "N/A"))

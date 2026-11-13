@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from src.app.labels import algorithm_label
 
 def render(res_svc, mod_svc, exp_svc):
     st.header("Model Performance")
@@ -19,7 +20,7 @@ def render(res_svc, mod_svc, exp_svc):
         if metrics:
             records.append({
                 "Experiment": r["exp_name"],
-                "Aggregation": r.get("aggregation", ""),
+                "Aggregation": algorithm_label(r),
                 "PR-AUC": metrics.get("pr_auc"),
                 "F1": metrics.get("f1"),
                 "Precision": metrics.get("precision"),
@@ -43,8 +44,7 @@ def render(res_svc, mod_svc, exp_svc):
     if client_metrics:
         client_records = []
         for client, cm in client_metrics.items():
-            cm["Bank"] = client
-            client_records.append(cm)
+            client_records.append({**cm, "Bank": client})
             
         df_client = pd.DataFrame(client_records).set_index("Bank")
         st.dataframe(df_client.round(4), use_container_width=True)

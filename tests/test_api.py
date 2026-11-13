@@ -35,3 +35,32 @@ def test_validation_errors(rows):
     bad = dict(rows[0]); bad.pop("amount")
     assert client.post("/score", json={"transactions": [bad]}).status_code == 422
     assert client.post("/score", json={"transactions": []}).status_code == 422
+
+
+def test_non_finite_rejected(rows):
+    # raw JSON so NaN/Infinity literals are actually sent
+    for lit in ("NaN", "Infinity", "-Infinity"):
+        body = '{"transactions": [{' + ", ".join(
+            f'"{k}": {lit if k == "amount" else v}' for k, v in rows[0].items()) + "}]}"
+        r = client.post("/score", content=body, headers={"content-type": "application/json"})
+        assert r.status_code == 422, lit
+
+
+def test_explain_cap(rows):
+    from src.api import MAX_EXPLAIN_TRANSACTIONS
+    many = [rows[0]] * (MAX_EXPLAIN_TRANSACTIONS + 1)
+    r = client.post("/score", json={"transactions": many, "explain": True})
+    assert r.status_code == 422 and str(MAX_EXPLAIN_TRANSACTIONS) in r.json()["detail"]
+    # without explain the same batch is fine
+    assert client.post("/score", json={"transactions": many}).status_code == 200
+
+
+def test_score_503_when_model_unavailable(rows, monkeypatch):
+    import src.api as api
+
+    def boom():
+        raise FileNotFoundError("model checkpoint missing")
+
+    monkeypatch.setattr(api, "_services", boom)
+    r = client.post("/score", json={"transactions": rows[:1]})
+    assert r.status_code == 503 and "model unavailable" in r.json()["detail"]

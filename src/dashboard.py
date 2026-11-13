@@ -7,7 +7,7 @@ if _ROOT not in sys.path:
     sys.path.insert(0, _ROOT)
 
 import streamlit as st
-from src.app.state import init_app_state, get_state, set_state
+from src.app.state import init_app_state, set_state
 from src.services.results import ResultsService
 from src.services.model import ModelService
 from src.services.explainability import ExplainabilityService
@@ -53,6 +53,7 @@ from src.app.pages import (
     federated_training,
     model_performance,
     robustness,
+    real_data,
     transaction_analyzer,
     live_stream,
     explainability,
@@ -65,6 +66,7 @@ PAGES = {
     "Federated Training": federated_training.render,
     "Model Performance": model_performance.render,
     "Robustness": robustness.render,
+    "Real-Data Study": real_data.render,
     "Transaction Analyzer": transaction_analyzer.render,
     "Live Stream": live_stream.render,
     "Explainability": explainability.render,

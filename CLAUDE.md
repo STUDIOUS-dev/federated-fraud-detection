@@ -20,12 +20,12 @@ python -m src.experiments.exp4_fedprox   # run one experiment (exp1..exp10); wri
 ```
 
 ```bash
-python scripts/run_all_experiments.py                  # regenerate exp1-10 (Flower+Ray, ~20 min; overwrites results/)
+python scripts/run_all_experiments.py --yes            # regenerate exp1-10 (Flower+Ray, ~20 min; needs flwr[simulation]; DELETES summary.jsonl and overwrites results/)
 python -m src.experiments.study [--only REGEX]         # 38 scenarios x 5 seeds, resumable; writes results/study/ + docs/STUDY_RESULTS.md
 python -m src.experiments.study --report-only          # rebuild the report from results/study/runs.jsonl
 ```
 
-No linter is configured. `scripts/` holds helper/acceptance scripts. `tests/test_ui.py` uses a 3 s AppTest timeout, so it can fail on a cold start if run alone first; run it after `tests/test_dashboard.py` or the full suite.
+No linter is configured. `scripts/` holds helper/acceptance scripts. The local interpreter may have older packages than `requirements.txt` allows (NumPy 1.26 / torch 2.2 were seen); CI installs the latest, so check changes on a fresh venv before trusting a local pass. `scripts/backfill.py` is legacy and refuses to run without `--force`.
 
 ## Architecture
 
@@ -33,7 +33,7 @@ No linter is configured. `scripts/` holds helper/acceptance scripts. `tests/test
 
 **Config**: `configs/default.yaml` is loaded by `config.load_config()` into the flat `Config` dataclass. Experiments copy the default config and override fields via `setattr` (e.g. `client_sizes`, `dropout_rate`, `malicious_client_index`, `aggregation`, `heterogeneity`).
 
-**Experiment framework** (`src/experiments/framework.py`): `ExperimentFramework` seeds RNGs, dumps config, prepares per-client + global test data, and `save_results` writes `results/<exp>/results.json` and appends to `results/summary.jsonl`. `run_fl_experiment(name, overrides)` wires Flower: `federated.client.get_client_fn` + `federated.server.get_strategy`, runs `fl.simulation.start_simulation` (Ray), and saves `model.pt` and `test_sample_{X,y}.npy` (used by SHAP). `build_data` always scores every scenario on the same reference test pool (default heterogeneity/sizes, same seed). `run_fl_inprocess` is a Ray-free runner using the same clients/strategies (verified bit-identical to Flower), used by `study.py`; `runners.py` has the centralized/local baselines. Each `expN_*.py` is a thin wrapper calling this with overrides; exp1/exp2 are non-federated baselines.
+**Experiment framework** (`src/experiments/framework.py`): `ExperimentFramework` seeds RNGs, dumps config, prepares per-client + global test data, and `save_results` writes `results/<exp>/results.json` and appends to `results/summary.jsonl`. `run_fl_experiment(name, overrides)` wires Flower: `federated.client.get_client_fn` + `federated.server.get_strategy`, runs `fl.simulation.start_simulation` (Ray), and saves `model.pt` and `test_sample_{X,y}.npy` (used by SHAP). `build_data` always scores every scenario on the same reference test pool (default heterogeneity/sizes, same seed). `run_fl_inprocess` is a Ray-free runner using the same clients/strategies (identical to Flower when `dropout_rate == 0`, checked by the opt-in `RUN_RAY_TESTS=1 python -m pytest tests/test_inprocess.py`; with dropout Flower's proxy cids are random node ids, so different banks drop), used by `study.py`; `runners.py` has the centralized/local baselines. Each `expN_*.py` is a thin wrapper calling this with overrides; exp1/exp2 are non-federated baselines.
 
 **Federated layer** (`src/federated/`): `client.FraudClient` (Flower NumPyClient; local training in `local_training.py` with per-client/round seeding, FedProx proximal term, `MaliciousFraudClient` with `cfg.attack` = scale | signflip | labelflip), `server.py` has `Tracked*` strategies (FedAvg/FedProx/FedMedian/FedTrimmedAvg/Krum, names case-insensitive, seeded `dropout_rate`) that record per-client metrics and participating clients per round and keep `latest_params` for checkpointing.
 

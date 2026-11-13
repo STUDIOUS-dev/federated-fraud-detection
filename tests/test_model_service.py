@@ -56,3 +56,40 @@ def test_preprocessing_parity():
     # Verify exact shape and numeric parity
     assert X_regen_subset.shape == frozen_X.shape
     np.testing.assert_allclose(X_regen_subset, frozen_X, atol=1e-5)
+
+
+def _svc():
+    svc = ModelService(exp_name="exp10_defense", base_dir="results")
+    svc.load_model()
+    return svc
+
+
+def test_preprocess_does_not_mutate_input():
+    svc = _svc()
+    df = svc.get_test_transactions().head(5).copy()
+    cols, snapshot = list(df.columns), df.copy()
+    svc._preprocess(df)
+    svc.predict_proba(df)
+    assert list(df.columns) == cols and "is_fraud" not in set(cols) - set(snapshot.columns)
+    pd.testing.assert_frame_equal(df, snapshot)
+    no_label = df[svc_features(svc)].copy()
+    svc.predict_proba(no_label)
+    assert "is_fraud" not in no_label.columns
+
+
+def svc_features(svc):
+    from src.feature_engineering import BASE_FEATURES
+    return BASE_FEATURES
+
+
+def test_preprocess_rejects_nan_inf_and_non_numeric():
+    svc = _svc()
+    base = svc.get_test_transactions()[svc_features(svc)].head(3).copy()
+    col = svc_features(svc)[0]
+    for bad in (np.nan, np.inf, -np.inf):
+        df = base.copy(); df[col] = df[col].astype(float); df.iloc[0, df.columns.get_loc(col)] = bad
+        with pytest.raises(ValueError, match="finite"):
+            svc.predict_proba(df)
+    df = base.copy().astype(object); df.iloc[0, df.columns.get_loc(col)] = "abc"
+    with pytest.raises(ValueError, match="numeric"):
+        svc.predict_proba(df)

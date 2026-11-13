@@ -16,7 +16,10 @@ def test_explainability_service_integration():
     assert "feature_names" in result
     assert "explanation" in result
     assert "model_probability" in result
-    
+    assert "base_value" in result
+    # Regression: SHAP expected_value may be a 1-element array on newer NumPy
+    assert type(result["base_value"]) is float
+
     metadata = model_svc.get_model_metadata()
     assert len(result["shap_values"]) == metadata["n_features"]
     assert len(result["feature_names"]) == metadata["n_features"]
