@@ -20,21 +20,22 @@ Detecting financial fraud requires large, diverse datasets. However, banks may f
 I implemented and tested several core features throughout this project:
 - **Heterogeneous bank simulation**: I generated synthetic transaction data simulating four different banking profiles (e.g., retail-heavy vs. high-value transactions).
 - **Centralized & local baselines**: I built baseline PyTorch models to compare FL against a centralized reference baseline and isolated silos.
-- **Federated algorithms**: I integrated Flower (`flwr`) to experiment with `FedAvg`, `FedProx`, and `FedMedian` aggregation strategies.
-- **Poisoning experiments**: I introduced a malicious client to study model collapse and robustness under data-poisoning attacks.
+- **Federated algorithms**: I integrated Flower (`flwr`) to experiment with `FedAvg`, `FedProx`, `FedMedian`, `FedTrimmedAvg` and `Krum` aggregation strategies.
+- **Poisoning experiments**: I introduced malicious clients (three attacks: weight `scale`, `signflip`, `labelflip`) to study model collapse and robustness under data-poisoning attacks.
 - **SHAP explainability**: I added SHAP to provide human-readable, localized feature attribution for individual transactions.
 - **Streamlit dashboard**: I created an interactive web application to visualize the frozen experiments and dynamically analyze transactions.
 - **Live Stream page**: replays held-out transactions in batches with running alerts, precision and recall.
 - **CSV scoring**: upload engineered-feature transactions in the Transaction Analyzer and download scored results.
 - **Scoring API (FastAPI)**: `POST /score` returns fraud probability, risk level and optional SHAP explanation.
-- **Real-data study**: the same federated comparison on the public OpenML credit-card dataset.
+- **Real-data study**: the same federated comparison on the public OpenML credit-card dataset, with its own dashboard page.
 
 ## Architecture
 ```text
 +---------------------------+
 |      Global Server        |
 | FedAvg / FedProx /        |
-| FedMedian                 |
+| FedMedian / FedTrimmedAvg |
+| / Krum                    |
 +-------------+-------------+
               |
       +-------+-------+-------+-------+
@@ -73,7 +74,7 @@ Here is how I structured the final repository:
 │   ├── app/             # Streamlit dashboard pages and state
 │   ├── experiments/     # Reproducible FL scripts (Exp 1-10, multi-seed `study.py`)
 │   ├── api.py           # FastAPI scoring service
-│   ├── federated/       # Flower clients and custom strategies (FedAvg, FedProx, FedMedian)
+│   ├── federated/       # Flower clients and custom strategies (FedAvg, FedProx, FedMedian, FedTrimmedAvg, Krum)
 │   └── services/        # Abstraction layer mapping core FL to UI components
 ├── tests/               # Pytest suite
 ├── README.md
@@ -90,6 +91,8 @@ pip install -r requirements.txt
 # If flwr[simulation] requires Ray and you face dependency issues with protobuf:
 pip install "ray[default]"
 ```
+
+**Ray is optional.** The dashboard, the scoring API, the test suite and the multi-seed study (`python -m src.experiments.study`) do not need Ray. Only the Ray-based single-seed experiments (exp3-exp10, e.g. via `scripts/run_all_experiments.py`) need the simulation extra: `pip install "flwr[simulation]"`.
 
 ### Linux / macOS
 ```bash
@@ -118,15 +121,20 @@ To validate the current integrity of the codebase:
 ```bash
 python -m pytest -v
 ```
+An opt-in test compares the Ray-free in-process runner with the Flower/Ray simulation (exact match for FedAvg; the client-dropout case is a documented expected failure). It is skipped unless Ray is installed and enabled:
+```bash
+pip install "flwr[simulation]"
+RUN_RAY_TESTS=1 python -m pytest tests/test_inprocess.py -v     # takes a few minutes; FL_NUM_CPUS=2 limits Ray
+```
 
 ## Research Experiments
 The original ten experiments (`src/experiments/exp1_*` ... `exp10_*`) are single-seed (seed 42) demonstrations; their outputs and model checkpoints are in `results/` and are what the dashboard shows. To regenerate all of them (takes ~20 minutes; Flower + Ray):
 ```bash
-python scripts/run_all_experiments.py
+python scripts/run_all_experiments.py --yes   # --yes is required: it DELETES results/summary.jsonl and overwrites the frozen results
 python -m src.experiments.exp4_fedprox     # or one at a time
 ```
 
-Because single seeds are noisy (the test pool has only ~53 fraud cases), the headline results come from a **multi-seed study**: 38 scenarios x 5 seeds, every scenario scored on the same reference test pool. It uses an in-process runner that drives the same clients and strategies as Flower (and reproduces the Flower/Ray result exactly), so it finishes in about an hour instead of many.
+Because single seeds are noisy (the test pool has only ~53 fraud cases), the headline results come from a **multi-seed study**: 38 scenarios x 5 seeds, every scenario scored on the same reference test pool. It uses an in-process runner that drives the same clients and strategies as Flower (verified identical to the Flower/Ray simulation when no client drops out; with client dropout the two runners drop different banks, so results agree only statistically), so it finishes in about an hour instead of many.
 ```bash
 python -m src.experiments.study                 # resumable; writes results/study/ and docs/STUDY_RESULTS.md
 python -m src.experiments.study --only attack   # a subset (regex on scenario name)
@@ -176,7 +184,9 @@ SHAP provides localized feature attribution, which allows the dashboard to gener
 - Only mild heterogeneity between banks, so null results for IID-ness and FedProx may not carry over to real data.
 - The real-data "banks" are a random, skewed partition of one public dataset (row order stands in for time), not separate institutions.
 - The API and CSV upload expect already-engineered features; raw transactions need the rolling customer/terminal history computed first.
+- **Velocity features are nearly dead:** the synthetic generator draws each customer's transaction times from a range of 5,184,000 minutes (about 10 years) instead of 60 days, so the 1-hour velocity features (`customer_tx_1h`, `customer_amount_1h`) are almost always zero (about 0.03% of rows non-zero) and contribute almost nothing. This is left as is because changing it would invalidate the frozen results.
+- **Pooled scaler:** the feature scaler is fitted on the pooled training data of all banks, which a real federation would have to replace with per-bank or securely aggregated statistics.
 - Not a production system.
 
 ## Future Work
-Differential privacy and secure aggregation; adaptive and colluding attackers; raw-transaction feature pipeline for the API; a dashboard page for the real-data study; communication-cost analysis.
+Differential privacy and secure aggregation; adaptive and colluding attackers; raw-transaction feature pipeline for the API; communication-cost analysis.

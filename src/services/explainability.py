@@ -66,5 +66,16 @@ class ExplainabilityService:
             "feature_names": expected_features,
             "explanation": explanation_text,
             "model_probability": float(model_prob),
-            "base_value": float(self.expected_value) if self.expected_value is not None else None
+            "base_value": self._base_value_as_float()
         }
+
+    def _base_value_as_float(self):
+        """Convert SHAP's expected_value (scalar, 0-d/1-element array, list or
+        torch tensor) to a plain Python float; None if unavailable."""
+        ev = self.expected_value
+        if ev is None:
+            return None
+        if isinstance(ev, torch.Tensor):
+            ev = ev.detach().cpu().numpy()
+        arr = np.asarray(ev, dtype=float).ravel()
+        return float(arr[0]) if arr.size else None

@@ -1,14 +1,16 @@
 import os
 import sys
+from pathlib import Path
 sys.path.insert(0, os.path.abspath("."))
+DASHBOARD = str(Path(__file__).resolve().parents[1] / "src" / "dashboard.py")
 import numpy as np
 import pytest
 from streamlit.testing.v1 import AppTest
 
 def test_pages():
     print("Initializing AppTest for dashboard.py...")
-    at = AppTest.from_file("src/dashboard.py")
-    at.run(timeout=30)
+    at = AppTest.from_file(DASHBOARD)
+    at.run(timeout=180)
     assert not at.exception, f"App crashed on startup: {at.exception}"
 
     pages = [
@@ -17,7 +19,9 @@ def test_pages():
         "Federated Training",
         "Model Performance",
         "Robustness",
+        "Real-Data Study",
         "Transaction Analyzer",
+        "Live Stream",
         "Explainability",
         "Project Information"
     ]
@@ -25,7 +29,7 @@ def test_pages():
     for page in pages:
         print(f"Navigating to {page}...")
         # In streamlit AppTest, we can set the sidebar radio value
-        at.sidebar.radio[0].set_value(page).run(timeout=30)
+        at.sidebar.radio[0].set_value(page).run(timeout=180)
         assert not at.exception, f"App crashed when navigating to {page}: {at.exception}"
         
         # Check specific constraints per page

@@ -7,8 +7,9 @@ results/study/runs.jsonl. The runner is resumable: finished (scenario, seed) pai
     python -m src.experiments.study --only attack --seeds 42 43
     python -m src.experiments.study --report-only         # just rebuild aggregate.json / STUDY_RESULTS.md
 
-Federated scenarios use the Ray-free in-process runner (identical clients/strategies, verified to
-reproduce the Flower simulation bit-for-bit; see tests/test_inprocess.py).
+Federated scenarios use the Ray-free in-process runner (same clients/strategies as the Flower
+simulation). Equivalence with Flower is checked by the opt-in test tests/test_inprocess.py:
+    RUN_RAY_TESTS=1 python -m pytest tests/test_inprocess.py -v     # needs flwr[simulation]
 """
 import argparse
 import json

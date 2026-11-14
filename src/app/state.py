@@ -6,13 +6,8 @@ def init_app_state():
         "selected_experiment": "exp10_defense",
         "selected_transaction_idx": 0,
         "selected_view": "Home",
-        
-        # Cached service instances (to avoid reloading models/explainers constantly)
-        "results_service": None,
-        "model_service": None,
-        "explainability_service": None
     }
-    
+
     for key, val in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = val

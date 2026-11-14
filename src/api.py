@@ -2,19 +2,29 @@
 
 Run: uvicorn src.api:app --port 8000
 Inputs are the 14 engineered features (see src.feature_engineering.BASE_FEATURES).
+Feature values must be finite (NaN/Infinity are rejected with 422). At most 1000
+transactions per request; with explain=true at most MAX_EXPLAIN_TRANSACTIONS (50)
+are allowed, since SHAP runs once per row (422 above that). /score returns 503 if
+the model artifacts cannot be loaded.
 """
 from functools import lru_cache
-from typing import List, Optional
+from typing import Annotated, List, Optional
 
 import pandas as pd
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, create_model
 
 from src.feature_engineering import BASE_FEATURES
 from src.services.model import ModelService
 from src.services.explainability import ExplainabilityService
 
-Transaction = create_model("Transaction", **{f: (float, ...) for f in BASE_FEATURES})
+MAX_EXPLAIN_TRANSACTIONS = 50
+
+Transaction = create_model(
+    "Transaction", **{f: (Annotated[float, Field(allow_inf_nan=False)], ...) for f in BASE_FEATURES}
+)
 
 
 class ScoreRequest(BaseModel):
@@ -35,6 +45,15 @@ class ScoreResponse(BaseModel):
 
 
 app = FastAPI(title="Federated Fraud Detection API", version="1.0")
+
+
+@app.exception_handler(RequestValidationError)
+async def _validation_error(request: Request, exc: RequestValidationError):
+    # Drop the echoed "input"/"ctx": a NaN/inf input cannot be JSON-serialised
+    # and would turn the 422 into a 500.
+    detail = [{"loc": list(e.get("loc", ())), "msg": e.get("msg", ""), "type": e.get("type", "")}
+              for e in exc.errors()]
+    return JSONResponse(status_code=422, content={"detail": detail})
 
 
 @lru_cache(maxsize=1)
@@ -59,9 +78,16 @@ def health():
 
 @app.post("/score", response_model=ScoreResponse)
 def score(req: ScoreRequest):
-    ms, es = _services()
+    try:
+        ms, es = _services()
+    except Exception as e:
+        raise HTTPException(503, f"model unavailable: {e}")
+    if req.explain and len(req.transactions) > MAX_EXPLAIN_TRANSACTIONS:
+        raise HTTPException(
+            422, f"explain=true supports at most {MAX_EXPLAIN_TRANSACTIONS} transactions per request "
+                 f"(got {len(req.transactions)})")
     df = pd.DataFrame([t.model_dump() for t in req.transactions])[BASE_FEATURES]
-    probs = ms.predict_proba(df.copy())
+    probs = ms.predict_proba(df)
     results = []
     for i, p in enumerate(probs):
         p = float(p)

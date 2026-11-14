@@ -1,4 +1,5 @@
 import streamlit as st
+import numpy as np
 import pandas as pd
 from src.app.state import get_state, set_state
 
@@ -8,8 +9,18 @@ def score_uploaded(mod_svc, df: pd.DataFrame) -> pd.DataFrame:
     missing = [f for f in BASE_FEATURES if f not in df.columns]
     if missing:
         raise ValueError(f"Missing required columns: {missing}")
+    if len(df) == 0:
+        raise ValueError("The uploaded file contains no rows.")
     out = df.copy()
-    out["fraud_probability"] = mod_svc.predict_proba(df.copy())
+    feats = out[list(BASE_FEATURES)].apply(pd.to_numeric, errors="coerce")
+    arr = feats.to_numpy(dtype=float)
+    bad_mask = ~np.isfinite(arr)
+    if bad_mask.any():
+        bad_cols = [c for c, b in zip(BASE_FEATURES, bad_mask.any(axis=0)) if b]
+        raise ValueError(
+            f"Non-numeric, empty or infinite values in columns: {bad_cols}")
+    out[list(BASE_FEATURES)] = feats
+    out["fraud_probability"] = mod_svc.predict_proba(feats.copy())
     out["predicted"] = (out["fraud_probability"] >= 0.5).astype(int)
     return out
 

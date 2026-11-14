@@ -142,8 +142,9 @@ def run_fl_inprocess(cfg: Config, client_data: dict, global_test: tuple):
     """Ray-free equivalent of run_fl_core for large sweeps.
 
     Drives the SAME clients and the SAME Tracked* strategies through the same fit -> aggregate ->
-    central-evaluate -> client-evaluate round protocol, in one process. tests/test_inprocess.py and the
-    study runner verify it reproduces the Flower/Ray simulation. Returns (history_dict, strategy, seconds)
+    central-evaluate -> client-evaluate round protocol, in one process. The opt-in test
+    tests/test_inprocess.py compares it against the Flower/Ray simulation (run with
+    `RUN_RAY_TESTS=1 python -m pytest tests/test_inprocess.py -v`; needs `flwr[simulation]`). Returns (history_dict, strategy, seconds)
     where history_dict maps metric -> [(round, value), ...] (round 0 = initial model, as in Flower).
     """
     from flwr.common import (Code, Status, FitRes, EvaluateRes, ndarrays_to_parameters,

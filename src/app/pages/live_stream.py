@@ -50,8 +50,9 @@ def render(res_svc, mod_svc, exp_svc):
         st.error("Model is not loaded.")
         return
 
-    df = mod_svc.get_test_transactions().sort_values("timestamp").reset_index(drop=True) \
-        if "timestamp" in mod_svc.get_test_transactions() else mod_svc.get_test_transactions()
+    df = mod_svc.get_test_transactions()
+    if "timestamp" in df.columns:
+        df = df.sort_values("timestamp").reset_index(drop=True)
 
     c1, c2, c3 = st.columns(3)
     batch = c1.slider("Transactions per tick", 1, 50, 10)
@@ -91,9 +92,9 @@ def render(res_svc, mod_svc, exp_svc):
                 break
             new = score_stream(mod_svc, df, pos, batch)
             st.session_state.stream_scored = pd.concat([st.session_state.stream_scored, new], ignore_index=True)
-            st.session_state.stream_pos = pos + batch
+            st.session_state.stream_pos = min(pos + batch, len(df))
             draw()
             time.sleep(delay)
     else:
         draw()
-    st.caption(f"Position: {st.session_state.stream_pos} / {len(df)}. Alerts feed shows the latest flagged transactions.")
+    st.caption(f"Position: {min(st.session_state.stream_pos, len(df))} / {len(df)}. Alerts feed shows the latest flagged transactions.")

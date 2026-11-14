@@ -1,54 +1,55 @@
-import numpy as np
-import torch
+"""Print SHAP explanations of the frozen model (results/exp10_defense/model.pt) for two test transactions.
+
+Writes nothing: data comes from build_data() (no ExperimentFramework, so no config.yaml / scaler.pkl
+are rewritten) and the checkpoint is only read.
+"""
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import numpy as np  # noqa: E402
+import torch  # noqa: E402
 from src.config import load_config
-from src.experiments.framework import ExperimentFramework
+from src.experiments.framework import build_data
 from src.model import FraudMLP
 from src.explainability import get_explainer, explain_transaction, generate_human_explanation
 from src.feature_engineering import BASE_FEATURES
 
+EXP_DIR = "results/exp10_defense"
+
+
 def validate_shap():
     cfg = load_config()
-    framework = ExperimentFramework("exp_shap", cfg)
-    _, (global_test_X, global_test_y) = framework.prepare_data()
-    
-    n_features = framework.get_n_features()
+    _, (global_test_X, global_test_y), _ = build_data(cfg)
+
+    n_features = len(BASE_FEATURES)
     model = FraudMLP(n_features, cfg.hidden_dim, cfg.dropout)
+    model.load_state_dict(torch.load(f"{EXP_DIR}/model.pt", weights_only=True))
     model.eval()
-    
-    # Pick 2 transactions (one fraud, one non-fraud if possible)
+
     fraud_indices = np.where(global_test_y == 1)[0]
     non_fraud_indices = np.where(global_test_y == 0)[0]
-    
     if len(fraud_indices) > 0 and len(non_fraud_indices) > 0:
-        idx1 = fraud_indices[0]
-        idx2 = non_fraud_indices[0]
-        indices = [idx1, idx2]
+        indices = [fraud_indices[0], non_fraud_indices[0]]
     else:
         indices = [0, 1]
-        
+
     X_sample = global_test_X[indices]
     y_sample = global_test_y[indices]
-    
-    # Predict
+
     with torch.no_grad():
-        X_tensor = torch.tensor(X_sample, dtype=torch.float32)
-        logits = model(X_tensor)
-        probs = torch.sigmoid(logits).numpy().flatten()
+        probs = torch.sigmoid(model(torch.tensor(X_sample, dtype=torch.float32))).numpy().flatten()
         preds = (probs > 0.5).astype(int)
-        
-    # SHAP
-    bg_data = global_test_X[:100]
-    explainer = get_explainer(model, bg_data)
-    
+
+    explainer = get_explainer(model, global_test_X[:100])
+
     for i, idx in enumerate(indices):
         print(f"\n--- Transaction {i+1} (True Label: {y_sample[i]}) ---")
         print(f"Prediction: {preds[i]}, Probability: {probs[i]:.4f}")
-        
-        instance_X = X_sample[i:i+1] # Keep 2D
-        shap_values = explain_transaction(explainer, instance_X)
-        
-        human_exp = generate_human_explanation(shap_values, BASE_FEATURES)
-        print(human_exp)
-        
+        shap_values = explain_transaction(explainer, X_sample[i:i+1])
+        print(generate_human_explanation(shap_values, BASE_FEATURES))
+
+
 if __name__ == "__main__":
     validate_shap()

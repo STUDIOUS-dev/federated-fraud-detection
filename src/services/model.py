@@ -1,14 +1,16 @@
-import joblib
-import torch
-import numpy as np
-import pandas as pd
 from pathlib import Path
 
-from src.model import FraudMLP
-from src.feature_engineering import BASE_FEATURES, add_causal_features
-from src.preprocessing import to_xy, temporal_split
-from src.config import load_config
+import joblib
+import numpy as np
+import pandas as pd
+import torch
+import yaml
+
+from src.config import Config
 from src.data_generation import generate_federation
+from src.feature_engineering import BASE_FEATURES, add_causal_features
+from src.model import FraudMLP
+from src.preprocessing import temporal_split
 
 class ModelService:
     def __init__(self, exp_name: str = "exp10_defense", base_dir: str = "results"):
@@ -18,6 +20,7 @@ class ModelService:
         
         self.model = None
         self.scaler = None
+        self.cfg = None
         self.test_data_cache = None
         
     def load_model(self):
@@ -34,9 +37,7 @@ class ModelService:
             raise FileNotFoundError(f"Config not found at {config_path}")
             
         with open(config_path, "r") as f:
-            import yaml
             raw = yaml.safe_load(f)
-        from src.config import Config
         self.cfg = Config(**raw)
         
         # Load scaler
@@ -56,7 +57,7 @@ class ModelService:
         if self.test_data_cache is not None:
             return self.test_data_cache
             
-        if not hasattr(self, 'cfg'):
+        if self.cfg is None:
             self.load_model()
             
         # Recreate data using exact configuration and seeds
@@ -81,22 +82,21 @@ class ModelService:
         if self.scaler is None:
             self.load_model()
             
-        # Check required columns (from BASE_FEATURES and 'is_fraud' for to_xy)
         missing = [f for f in BASE_FEATURES if f not in raw_tx_df.columns]
         if missing:
             raise ValueError(f"Missing required features: {missing}")
-            
-        # Temporarily add is_fraud if missing to reuse to_xy
-        added_dummy = False
-        if "is_fraud" not in raw_tx_df.columns:
-            raw_tx_df["is_fraud"] = 0
-            added_dummy = True
-            
-        X, _ = to_xy(raw_tx_df, self.scaler)
-        
-        if added_dummy:
-            raw_tx_df.drop(columns=["is_fraud"], inplace=True)
-            
+
+        feats = raw_tx_df[BASE_FEATURES]  # new frame; caller's frame is untouched
+        try:
+            feats = feats.astype(float)
+        except (ValueError, TypeError) as e:
+            raise ValueError(f"Feature values must be numeric: {e}") from e
+        values = feats.to_numpy()
+        if not np.isfinite(values).all():
+            bad = [f for f in BASE_FEATURES if not np.isfinite(feats[f].to_numpy()).all()]
+            raise ValueError(f"Feature values must be finite (no NaN/inf); offending features: {bad}")
+
+        X = self.scaler.transform(feats).astype(np.float32)
         return torch.from_numpy(X).float()
 
     def predict_proba(self, raw_tx_df: pd.DataFrame) -> np.ndarray:
@@ -114,7 +114,7 @@ class ModelService:
 
     def get_model_metadata(self) -> dict:
         """Returns metadata about the loaded model and its expectations."""
-        if not hasattr(self, 'cfg'):
+        if self.cfg is None:
             self.load_model()
             
         return {
