@@ -170,3 +170,21 @@ def test_study_report_aggregate_and_paired():
     assert agg["a"]["global"]["pr_auc"]["mean"] == pytest.approx(0.30)
     p = paired(runs, "a", "b")
     assert p["n"] == 3 and p["wins"] == 3 and p["mean_diff"] == pytest.approx(0.05)
+
+
+def test_dropout_order_uses_partition_index_not_random_cid():
+    """Under Ray, Flower proxies carry a random node id as cid; dropout must follow the bank index."""
+    from src.federated.server import _partition_index
+
+    class RayLikeProxy:
+        def __init__(self, cid, partition_id):
+            self.cid, self.partition_id = cid, partition_id
+
+    class LegacyProxy:
+        def __init__(self, cid):
+            self.cid = cid
+
+    ray_like = [RayLikeProxy("14237238010823199150", 2), RayLikeProxy("5389875831426782007", 0),
+                RayLikeProxy("285298315600700548", 1), RayLikeProxy("13678377834088640357", 3)]
+    assert [p.partition_id for p in sorted(ray_like, key=_partition_index)] == [0, 1, 2, 3]
+    assert [_partition_index(LegacyProxy(c)) for c in ("0", "3", "bank_x")] == [0, 3, 0]
