@@ -57,14 +57,7 @@ CASES = [
     pytest.param({}, id="fedavg"),
     pytest.param(
         dict(aggregation="fedmedian", malicious_clients=[3], attack="signflip", dropout_rate=0.5),
-        id="fedmedian-signflip-dropout",
-        marks=pytest.mark.xfail(strict=False, reason=(
-            "KNOWN DISCREPANCY (flwr 1.36, ray 2.58): with dropout_rate>0 the two runners drop different banks. "
-            "Cause: Flower's RayActorClientProxy sets cid=str(node_id), a random node id rather than the "
-            "partition index, so TrackedStrategy.configure_fit applies the seeded dropout to a random ordering "
-            "of banks, while the in-process runner uses bank order. Measured: round 1 flower=['bank_c'] vs "
-            "inprocess=['bank_a']; final params differ by up to 8e-3. Note pr_auc is NaN in "
-            "every round at this tiny size (no positives in the test pool), so that comparison is vacuous."))),
+        id="fedmedian-signflip-dropout"),
 ]
 
 

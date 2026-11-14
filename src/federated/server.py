@@ -6,6 +6,20 @@ from typing import Dict, Optional, Tuple, Callable
 AGGREGATIONS = ("fedavg", "fedprox", "fedmedian", "fedtrimmedavg", "krum")
 
 
+def _partition_index(proxy) -> int:
+    """Bank index of a Flower client proxy.
+
+    Under Ray, recent Flower versions set ``proxy.cid`` to a random node id and keep the partition
+    (bank) index in ``proxy.partition_id``; older versions use the partition index as the cid.
+    Ordering by the partition index makes the seeded dropout hit the same banks on every run.
+    """
+    pid = getattr(proxy, "partition_id", None)
+    if pid is not None:
+        return int(pid)
+    cid = str(proxy.cid)
+    return int(cid) if cid.isdigit() else 0
+
+
 class _TrackingMixin:
     """Shared behaviour for all strategies: seeded client dropout, deterministic result
     ordering, and per-round bookkeeping of participants and per-client metrics."""
@@ -29,7 +43,7 @@ class _TrackingMixin:
 
     def configure_fit(self, server_round, parameters, client_manager):
         instructions = super().configure_fit(server_round, parameters, client_manager)
-        ordered = sorted(instructions, key=lambda ins: int(ins[0].cid) if str(ins[0].cid).isdigit() else 0)
+        ordered = sorted(instructions, key=lambda ins: _partition_index(ins[0]))
         return self.select_participants(ordered, server_round)
 
     def aggregate_fit(self, server_round: int, results, failures):

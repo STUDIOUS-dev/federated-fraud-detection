@@ -121,7 +121,7 @@ To validate the current integrity of the codebase:
 ```bash
 python -m pytest -v
 ```
-An opt-in test compares the Ray-free in-process runner with the Flower/Ray simulation (exact match for FedAvg; the client-dropout case is a documented expected failure). It is skipped unless Ray is installed and enabled:
+An opt-in test compares the Ray-free in-process runner with the Flower/Ray simulation (exact match of final weights, participants and per-bank metrics, with and without client dropout). It is skipped unless Ray is installed and enabled:
 ```bash
 pip install "flwr[simulation]"
 RUN_RAY_TESTS=1 python -m pytest tests/test_inprocess.py -v     # takes a few minutes; FL_NUM_CPUS=2 limits Ray
@@ -134,7 +134,7 @@ python scripts/run_all_experiments.py --yes   # --yes is required: it DELETES re
 python -m src.experiments.exp4_fedprox     # or one at a time
 ```
 
-Because single seeds are noisy (the test pool has only ~53 fraud cases), the headline results come from a **multi-seed study**: 38 scenarios x 5 seeds, every scenario scored on the same reference test pool. It uses an in-process runner that drives the same clients and strategies as Flower (verified identical to the Flower/Ray simulation when no client drops out; with client dropout the two runners drop different banks, so results agree only statistically), so it finishes in about an hour instead of many.
+Because single seeds are noisy (the test pool has only ~53 fraud cases), the headline results come from a **multi-seed study**: 38 scenarios x 5 seeds, every scenario scored on the same reference test pool. It uses an in-process runner that drives the same clients and strategies as Flower (verified identical to the Flower/Ray simulation by an opt-in test, including under client dropout), so it finishes in about an hour instead of many.
 ```bash
 python -m src.experiments.study                 # resumable; writes results/study/ and docs/STUDY_RESULTS.md
 python -m src.experiments.study --only attack   # a subset (regex on scenario name)
