@@ -58,6 +58,9 @@ CASES = [
     pytest.param(
         dict(aggregation="fedmedian", malicious_clients=[3], attack="signflip", dropout_rate=0.5),
         id="fedmedian-signflip-dropout"),
+    pytest.param(dict(clip_norm=0.5, dp_noise_multiplier=1.0, dropout_rate=0.25), id="fedavg-dp-dropout"),
+    pytest.param(dict(aggregation="krum", malicious_clients=[2, 3], attack="alie", alie_z=3.0, clip_norm=0.5),
+                 id="krum-alie-clip"),
 ]
 
 
@@ -81,3 +84,4 @@ def test_inprocess_matches_flower(overrides):
         np.testing.assert_array_equal(a, b, err_msg=f"final param tensor {i}")
 
     _assert_tree_equal(s_fl.client_metrics_history, s_ip.client_metrics_history, "client_metrics")
+    assert s_fl.communication_history == s_ip.communication_history

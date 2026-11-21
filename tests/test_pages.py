@@ -115,3 +115,25 @@ def test_score_uploaded_validation(svc):
     out = score_uploaded(svc, ok)
     assert "note" in out.columns and list(out["note"]) == ["a", "b", "c", "d"]
     assert out["fraud_probability"].between(0, 1).all()
+
+
+def test_privacy_attacks_loader_and_tables(tmp_path):
+    from src.app.pages.privacy_attacks import attack_table, communication_table, load_phase_e, privacy_table
+    assert load_phase_e(tmp_path / "missing.json") is None
+    bad = tmp_path / "bad.json"
+    bad.write_text("{not json")
+    assert load_phase_e(bad) is None
+
+    def entry(m, **extra):
+        return {"global": {"pr_auc": {"mean": m, "std": 0.01}, "recall_at_fpr1": {"mean": 0.3, "std": 0.02}},
+                **extra}
+    sc = {"fedavg": entry(0.3, communication_bytes=81920), "fedavg_clip0.5": entry(0.29),
+          "dp_z1.0": entry(0.2, epsilon=13.2), "adaptive_alie_x2_krum": entry(0.01)}
+    good = tmp_path / "agg.json"
+    good.write_text(json.dumps({"scenarios": sc}))
+    assert load_phase_e(good) == sc
+    assert communication_table(sc).iloc[0]["Traffic (KiB)"] == 80.0
+    priv = privacy_table(sc)
+    assert list(priv["ε (δ=1e-5)"]) == ["∞ (no noise)", "13.2"]
+    assert attack_table(sc, "x2").loc["alie", "Krum"] == "0.010 ± 0.010"
+    assert attack_table(sc, "x1").empty
