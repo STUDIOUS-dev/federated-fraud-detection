@@ -260,9 +260,11 @@ Noise between seeds is larger than most differences in this table; do not rank r
 | IID | 0.2465 | 0.3208 | 0.0529 | 0.0280 | 0.4717 |
 | Unequal Sizes | 0.2423 | 0.3019 | 0.0934 | 0.0537 | 0.3585 |
 | Class Imbalance | 0.2474 | 0.3019 | 0.0472 | 0.0249 | 0.4717 |
-| Dropout (p=0.5) | 0.2471 | 0.3019 | 0.0289 | 0.0148 | 0.5283 |
+| Dropout (p=0.5)* | 0.2461 | 0.3019 | 0.0306 | 0.0158 | 0.5094 |
 | Poisoned FedAvg (scale x-10) | 0.0064 | 0.0566 | 0.0000 | nan | 0.0000 |
 | Poisoned FedMedian | 0.2498 | 0.3208 | 0.0451 | 0.0236 | 0.5094 |
+
+\* Re-run on 2026-11-21 after the dropout-ordering fix (PR 2). The original run dropped a random set of banks under Ray (PR-AUC 0.2471); the re-run drops the seeded set and matches the in-process runner exactly.
 
 ## Final Product Validation
 
