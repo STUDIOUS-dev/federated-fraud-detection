@@ -1,5 +1,7 @@
 # Project Progress
 
+> **In progress: Phase E (v1.2)** on branch `claude/ecstatic-mayer-fbjo9k`. Code and results are done; the write-up remains. Start with [`docs/HANDOFF_PHASE_E.md`](docs/HANDOFF_PHASE_E.md).
+
 ## Project Status
 v1.1 - research-validity revision (Phases A-C complete). Product and documentation complete; research conclusions revised after multi-seed validation (see `docs/STUDY_RESULTS.md`).
 
