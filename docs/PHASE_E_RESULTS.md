@@ -60,6 +60,7 @@ Mechanism: each client update (local − global) is clipped to L2 norm C = 0.5, 
 |---|---|---|---|---|
 | alie | 0.301 ± 0.071 | 0.301 ± 0.072 | 0.301 ± 0.072 | 0.302 ± 0.073 |
 | alie_z3 | 0.300 ± 0.071 | 0.302 ± 0.072 | 0.302 ± 0.072 | 0.299 ± 0.074 |
+| alie_z5 | 0.302 ± 0.072 | 0.302 ± 0.072 | 0.302 ± 0.072 | 0.299 ± 0.074 |
 | minmax | 0.301 ± 0.070 | 0.302 ± 0.073 | 0.302 ± 0.073 | 0.296 ± 0.071 |
 
 **2 colluding attackers (bank_c, bank_d) of 4**
@@ -68,6 +69,7 @@ Mechanism: each client update (local − global) is clipped to L2 norm C = 0.5, 
 |---|---|---|---|---|
 | alie | 0.300 ± 0.068 | 0.301 ± 0.069 | 0.301 ± 0.069 | 0.301 ± 0.069 |
 | alie_z3 | 0.301 ± 0.069 | 0.305 ± 0.069 | 0.305 ± 0.069 | 0.242 ± 0.145 |
+| alie_z5 | 0.303 ± 0.070 | 0.242 ± 0.145 | 0.242 ± 0.145 | 0.164 ± 0.162 |
 | minmax | 0.300 ± 0.069 | 0.301 ± 0.069 | 0.301 ± 0.069 | 0.301 ± 0.069 |
 
 **ALIE z=3, 2 attackers: effect of clipping updates to C = 0.5 before aggregation**
@@ -78,7 +80,7 @@ Mechanism: each client update (local − global) is clipped to L2 norm C = 0.5, 
 | fedmedian | 0.305 ± 0.069 | 0.296 ± 0.076 |
 | krum | 0.242 ± 0.145 | 0.276 ± 0.085 |
 
-Threat model: the attackers are omniscient and colluding. In each round they see all honest updates and send one identical crafted update (the standard setting in which ALIE and Min-Max are evaluated). `alie`: mean − z·std per coordinate (z = 1 or 3; the paper's formula gives z = 0 for 4 clients). `minmax`: mean + γ·(−std/‖std‖) with the largest γ that keeps the update no farther from any honest update than the honest updates are from each other.
+Threat model: the attackers are omniscient and colluding. In each round they see all honest updates and send one identical crafted update (the standard setting in which ALIE and Min-Max are evaluated). `alie`: mean − z·std per coordinate (z = 1, 3 or 5; the paper's formula gives z = 0 for 4 clients). `minmax`: mean + γ·(−std/‖std‖) with the largest γ that keeps the update no farther from any honest update than the honest updates are from each other.
 
 ## 6. Paired comparisons (same seed, A minus B)
 
@@ -115,6 +117,14 @@ Threat model: the attackers are omniscient and colluding. In each round they see
 | alie_z3 x2 vs clean, fedmedian | +0.004 ± 0.013 | 3/5 | 0.7 |
 | alie_z3 x2 vs clean, fedtrimmedavg | +0.004 ± 0.013 | 3/5 | 0.7 |
 | alie_z3 x2 vs clean, krum | -0.059 ± 0.103 | 1/5 | -1.3 |
+| alie_z5 x1 vs clean, fedavg | +0.001 ± 0.005 | 4/5 | 0.5 |
+| alie_z5 x1 vs clean, fedmedian | +0.001 ± 0.005 | 4/5 | 0.6 |
+| alie_z5 x1 vs clean, fedtrimmedavg | +0.001 ± 0.005 | 4/5 | 0.6 |
+| alie_z5 x1 vs clean, krum | -0.001 ± 0.008 | 3/5 | -0.4 |
+| alie_z5 x2 vs clean, fedavg | +0.003 ± 0.013 | 3/5 | 0.5 |
+| alie_z5 x2 vs clean, fedmedian | -0.059 ± 0.103 | 1/5 | -1.3 |
+| alie_z5 x2 vs clean, fedtrimmedavg | -0.059 ± 0.103 | 1/5 | -1.3 |
+| alie_z5 x2 vs clean, krum | -0.137 ± 0.135 | 1/5 | -2.3 |
 | minmax x1 vs clean, fedavg | +0.000 ± 0.001 | 4/5 | 0.2 |
 | minmax x1 vs clean, fedmedian | +0.001 ± 0.005 | 4/5 | 0.5 |
 | minmax x1 vs clean, fedtrimmedavg | +0.001 ± 0.005 | 4/5 | 0.5 |

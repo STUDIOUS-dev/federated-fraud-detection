@@ -1,5 +1,31 @@
 # Release Notes
 
+## v1.2.0 (Phase E: communication, privacy, adaptive attacks)
+
+### Added
+- Per-round communication accounting (bytes up/down per client) in every strategy.
+- Update-norm clipping (`clip_norm`) and client-level differential privacy (`dp_noise_multiplier`, `dp_delta`) with a zCDP ε accountant, applied server-side in `aggregate_fit` (`src/federated/privacy_robustness.py`).
+- Adaptive colluding attacks `alie` (with `alie_z`) and `minmax`, crafted from the round's honest updates.
+- Phase E study: 53 scenarios × 5 seeds (`python -m src.experiments.study_e`, `--workers N`), results in `results/study_e/` and `docs/PHASE_E_RESULTS.md`.
+- Dashboard page "Privacy & Attacks".
+- Tests for clipping, DP noise and accounting, adaptive attacks, byte counting, and Flower/in-process equality under DP + dropout and ALIE + clipping.
+
+### Findings
+- About 38 KiB of traffic per round for four banks; 5 rounds reach full accuracy.
+- Clipping costs ≤ 0.009 PR-AUC and neutralises the scaling attacker (0.102 → 0.298).
+- Client-level DP: ε ≈ 13 gives 0.224 (worse than local-only training); ε ≤ 6 is unusable with four banks.
+- ALIE with 2 of 4 attackers (z = 5) breaks Krum on 2/5 seeds and FedMedian/FedTrimmedAvg on 1/5; FedAvg is unaffected. Weaker settings (z ≤ 3, Min-Max) had no measurable effect except on Krum.
+
+### Compatibility
+- All new options default to off; v1.1 results (`results/exp*`, `results/study/`) are unchanged and were not regenerated.
+
+### Still not covered
+- Secure aggregation; DP at a usable scale; Phase E on the OpenML data; optimisation-based adaptive attacks.
+
+---
+
+## v1.1.0
+
 ### Release
 `v1.1.0` (research-validity revision of v1.0.0)
 

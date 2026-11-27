@@ -1,5 +1,7 @@
 # Handoff: Phase E (v1.2) — status and how to continue
 
+> **Status 2026-11-27: steps 3.1-3.3 are done** (ALIE z=5 added and run, write-up in FINAL_REPORT §7.4/§8, README, RELEASE_NOTES, PROJECT_PROGRESS; full suite run). Only the PR (3.4, on request) and the optional E5 remain. The text below is the original note.
+
 Written 2026-11-21 for whoever picks this up next (a person or an AI agent).
 Branch: `claude/ecstatic-mayer-fbjo9k` (2 commits ahead of `main`, no PR opened yet).
 
