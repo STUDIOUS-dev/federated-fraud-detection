@@ -221,7 +221,7 @@ Results: 53 scenarios x 5 seeds (`results/study_e/`). Clipping is a cheap defenc
 - Streamlit cache state issues if files are modified during runtime.
 
 ## Change Log
-- 2026-11-27: Phase E (v1.2). Added ALIE z=5 scenarios (40 runs; existing runs re-checked bit-identical in the new environment), wrote the interpretation into FINAL_REPORT 7.4/8, README and release notes. Full suite: see below.
+- 2026-11-27: Phase E (v1.2). Added ALIE z=5 scenarios (40 runs; existing runs re-checked bit-identical in the new environment), wrote the interpretation into FINAL_REPORT 7.4/8, README and release notes. Full suite: 84 passed, 1 skipped (opt-in Ray test).
 - 2026-11-08: Phases A-C (research-validity revision).
   - A: reconciled README, report, progress file, runbook, release notes with measured results; `scratch/` -> tracked `scripts/`.
   - B: fully seeded training and initialisation (repeat runs bit-identical); shared reference test pool for all scenarios; 5-seed study with mean +/- std and paired comparisons; Ray-free in-process runner verified equal to Flower/Ray.
@@ -287,6 +287,6 @@ Noise between seeds is larger than most differences in this table; do not rank r
 - **SHAP validation**: Completed. Verified that SHAP uses exactly the same input model and produces correctly dimensioned attribution matching the model prediction (model attribution, not causal). Human-readable explanation generation works.
 - **Robustness validation**: Completed. Robustness page now reads values from results/summary.jsonl (no hard-coded fallbacks) and shows the multi-seed table.
 - **Documentation validation**: Completed. All required documentation files (README, FINAL_PRODUCT_GUIDE, DEMO_RUNBOOK, DEMO_CHECKLIST, FINAL_PRODUCT_PLAN) are present and describe the current architecture.
-- **Final test count**: 48/48 tests passing (100%) after the 2026-11-08 revision.
+- **Final test count**: 84 passed, 1 skipped (opt-in Ray comparison, `RUN_RAY_TESTS=1`) after Phase E (2026-11-27).
 - **Final status**: FINAL PRODUCT READY
 
