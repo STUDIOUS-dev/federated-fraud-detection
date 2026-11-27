@@ -79,6 +79,7 @@ def run_one(name: str, spec: dict, seed: int) -> dict:
     client_data, global_test, _ = build_data(cfg)
     n_features = len(BASE_FEATURES)
     t0 = time.time()
+    extra = {}
     if spec["kind"] == "central":
         res = run_centralized(cfg, client_data, global_test, n_features)
         hist, per_client, participants = res["history_centralized"], res["per_client_history"], {}
@@ -88,7 +89,8 @@ def run_one(name: str, spec: dict, seed: int) -> dict:
     else:
         hist, strat, _ = run_fl_inprocess(cfg, client_data, global_test)
         per_client, participants = strat.client_metrics_history, strat.participating_clients_history
-    return {
+        extra = _phase_e_fields(cfg, strat)
+    row = {
         "scenario": name, "seed": seed, "kind": spec["kind"], "overrides": spec["overrides"],
         "global_final": {k: v[-1][1] for k, v in hist.items()},
         "pr_auc_by_round": [v for _, v in hist.get("pr_auc", [])],
@@ -97,6 +99,26 @@ def run_one(name: str, spec: dict, seed: int) -> dict:
         "n_test": int(len(global_test[1])), "n_test_pos": int(global_test[1].sum()),
         "seconds": round(time.time() - t0, 1),
     }
+    row.update(extra)
+    return row
+
+
+def _phase_e_fields(cfg, strat) -> dict:
+    """Communication (bytes on the wire) and, when DP is on, the privacy budget (Phase E)."""
+    from src.federated.privacy_robustness import zcdp_epsilon
+    comm = getattr(strat, "communication_history", {})
+    out = {
+        "communication": {
+            "rounds": len(comm),
+            "upload_bytes": int(sum(r["upload_bytes"] for r in comm.values())),
+            "download_bytes": int(sum(r["download_bytes"] for r in comm.values())),
+        },
+    }
+    z = float(getattr(cfg, "dp_noise_multiplier", 0.0))
+    if z > 0:
+        out["privacy"] = {"noise_multiplier": z, "clip_norm": float(cfg.clip_norm),
+                          "delta": float(cfg.dp_delta), "epsilon": zcdp_epsilon(z, cfg.rounds, cfg.dp_delta)}
+    return out
 
 
 def load_runs(path: Path) -> list[dict]:

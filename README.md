@@ -28,6 +28,7 @@ I implemented and tested several core features throughout this project:
 - **CSV scoring**: upload engineered-feature transactions in the Transaction Analyzer and download scored results.
 - **Scoring API (FastAPI)**: `POST /score` returns fraud probability, risk level and optional SHAP explanation.
 - **Real-data study**: the same federated comparison on the public OpenML credit-card dataset, with its own dashboard page.
+- **Privacy, cost and adaptive attacks (Phase E)**: per-round communication accounting, update-norm clipping, client-level differential privacy (Gaussian noise with a zCDP ε accountant), and adaptive colluding attackers (ALIE, Min-Max) against every aggregator, with a "Privacy & Attacks" dashboard page.
 
 ## Architecture
 ```text
@@ -141,6 +142,11 @@ python -m src.experiments.study --only attack   # a subset (regex on scenario na
 python -m src.experiments.study --report-only   # rebuild the report from results/study/runs.jsonl
 ```
 
+Phase E (communication cost, clipping, client-level DP, adaptive attacks) is a separate 53-scenario × 5-seed study that writes only to `results/study_e/` and `docs/PHASE_E_RESULTS.md`:
+```bash
+python -m src.experiments.study_e --workers 4   # resumable; --report-only rebuilds the tables
+```
+
 ## Final Results
 Global PR-AUC, mean ± std over 5 seeds (full tables, per-bank results and paired tests: [docs/STUDY_RESULTS.md](docs/STUDY_RESULTS.md)):
 
@@ -158,6 +164,22 @@ What the data supports:
 - IID vs non-IID data, FedProx (mu up to 0.1) and client dropout (up to 50%) made no measurable difference in this synthetic setting.
 - FedAvg is clearly vulnerable to a weight-scaling attacker; FedMedian, trimmed mean and Krum all neutralise one attacker of four. With two of four malicious, median and trimmed mean fail; Krum survives only under favourable assumptions (see the caveats in the study report).
 - Absolute accuracy is modest (F1 about 0.04 at threshold 0.5) because the synthetic fraud signal is weak.
+
+### Phase E: communication, privacy, adaptive attacks (5 seeds)
+Full tables and paired tests: [docs/PHASE_E_RESULTS.md](docs/PHASE_E_RESULTS.md); discussion in section 7.4 of the [final report](docs/FINAL_REPORT.md).
+
+| Setting | PR-AUC |
+|---|---:|
+| FedAvg (re-run baseline, 190 KiB total traffic over 5 rounds) | 0.301 ± 0.069 |
+| FedAvg, updates clipped to L2 norm 0.5 | 0.297 ± 0.070 |
+| + client-level DP, ε ≈ 31 / 13 / 6 | 0.285 / 0.224 / 0.041 |
+| 1 scaling attacker: FedAvg / FedAvg + clipping | 0.102 / 0.298 |
+| 2 adaptive (ALIE z=5) attackers: FedAvg / FedMedian / Krum | 0.303 / 0.242 / 0.164 |
+
+- Communication is cheap: about 38 KiB per round for all four banks; five rounds move less data than pooling the training features once (~3.2 MB).
+- Clipping updates is a nearly free, effective defence against the scaling attacker.
+- Client-level DP is not practical with four banks: at ε ≈ 13 the model is already worse than training alone.
+- Adaptive colluding attackers target the robust aggregators: at 2 of 4, ALIE breaks Krum on 2/5 seeds and median/trimmed mean on 1/5, while plain FedAvg is unaffected.
 
 ### Real-data check (OpenML creditcard, 5 seeds, 4 simulated banks)
 Separate from the synthetic study; see [docs/REAL_DATA_RESULTS.md](docs/REAL_DATA_RESULTS.md). Reproduce with `python -m src.experiments.real_data_study` (downloads ~150 MB once).
@@ -179,8 +201,8 @@ SHAP provides localized feature attribution, which allows the dashboard to gener
 ## Limitations
 - **Synthetic data** in the main study with a weak fraud signal and about 53 fraud cases in each test pool; per-bank results are very noisy.
 - **Simulated banks** on one machine; no real network latency or bandwidth measured.
-- **No Differential Privacy** and **no Secure Aggregation**; model updates could leak information (e.g. gradient inversion).
-- **Limited attacks:** three simple, non-adaptive poisoning attacks, at most 2 of 4 clients.
+- **No Secure Aggregation**: the server sees each bank's update. Client-level DP is implemented, but with only 4 banks any useful ε (below about 10) destroys accuracy, so the main results run without it and updates could still leak information (e.g. gradient inversion).
+- **Attacks:** three simple poisoning attacks plus two adaptive ones (ALIE, Min-Max), at most 2 of 4 clients. The adaptive attackers are assumed omniscient and colluding (worst case); stronger, optimisation-based attacks were not tried.
 - Only mild heterogeneity between banks, so null results for IID-ness and FedProx may not carry over to real data.
 - The real-data "banks" are a random, skewed partition of one public dataset (row order stands in for time), not separate institutions.
 - The API and CSV upload expect already-engineered features; raw transactions need the rolling customer/terminal history computed first.
@@ -189,4 +211,4 @@ SHAP provides localized feature attribution, which allows the dashboard to gener
 - Not a production system.
 
 ## Future Work
-Differential privacy and secure aggregation; adaptive and colluding attackers; raw-transaction feature pipeline for the API; communication-cost analysis.
+Secure aggregation (incompatible with FedMedian/Krum, so it needs a different robust-aggregation design); differential privacy with many more clients, or with privacy amplification by client sampling; repeating the Phase E experiments on the OpenML data; a raw-transaction feature pipeline for the API.

@@ -22,6 +22,10 @@ federated:
   aggregation: "FedAvg"
   fedprox_mu: 0.01
   fraction_fit: 1.0
+  # Phase E (off by default; see docs/PHASE_E_RESULTS.md)
+  clip_norm: 0.0            # L2 bound on each client update, 0 = off
+  dp_noise_multiplier: 0.0  # client-level DP noise (needs clip_norm > 0 and FedAvg/FedProx)
+  dp_delta: 1.0e-5
 
 evaluation:
   primary_metrics:
@@ -32,4 +36,4 @@ evaluation:
   global_eval: true
   per_client_eval: true
 
-privacy_note: raw_data_stays_local; no_dp_or_secure_aggregation
+privacy_note: raw_data_stays_local; optional_client_level_dp (off by default); no_secure_aggregation

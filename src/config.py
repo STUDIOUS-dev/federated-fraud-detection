@@ -39,8 +39,13 @@ class Config:
     malicious_client_index: int = -1
     # Phase C additions (all optional / backwards compatible)
     malicious_clients: list[int] | None = None   # overrides malicious_client_index when set
-    attack: str = "scale"                        # scale | signflip | labelflip
+    attack: str = "scale"                        # scale | signflip | labelflip | alie | minmax
     trim_beta: float = 0.25                      # FedTrimmedAvg trim fraction per side
+    # Phase E additions (all optional / backwards compatible; defaults = off)
+    clip_norm: float = 0.0                       # L2 bound on each client update (0 = off)
+    dp_noise_multiplier: float = 0.0             # client-level DP: noise std = z * clip_norm / m
+    dp_delta: float = 1e-5                       # delta for the reported (epsilon, delta)
+    alie_z: float = 1.0                          # ALIE attack strength (std devs from the mean)
 
     def malicious_set(self) -> set[int]:
         if self.malicious_clients:
@@ -77,6 +82,10 @@ def load_config(config_path: str = "configs/default.yaml") -> Config:
         malicious_clients=raw["federated"].get("malicious_clients", None),
         attack=raw["federated"].get("attack", "scale"),
         trim_beta=raw["federated"].get("trim_beta", 0.25),
+        clip_norm=raw["federated"].get("clip_norm", 0.0),
+        dp_noise_multiplier=raw["federated"].get("dp_noise_multiplier", 0.0),
+        dp_delta=raw["federated"].get("dp_delta", 1e-5),
+        alie_z=raw["federated"].get("alie_z", 1.0),
         
         global_eval=raw["evaluation"]["global_eval"],
         per_client_eval=raw["evaluation"]["per_client_eval"],

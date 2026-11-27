@@ -1,7 +1,7 @@
 # Project Progress
 
 ## Project Status
-v1.1 - research-validity revision (Phases A-C complete). Product and documentation complete; research conclusions revised after multi-seed validation (see `docs/STUDY_RESULTS.md`).
+v1.2 - Phase E complete (communication cost, clipping, client-level DP, adaptive attacks; see `docs/PHASE_E_RESULTS.md` and section 7.4 of `docs/FINAL_REPORT.md`). Builds on v1.1, the research-validity revision (Phases A-C, `docs/STUDY_RESULTS.md`), whose results are unchanged.
 
 ### Research Status
 Complete for the scope below. Headline results are 5-seed means; the ten original experiments are single-seed (seed 42) demonstrations.
@@ -176,8 +176,21 @@ Track:
 - [x] UI tests (`tests/test_ui.py`)
 - [x] Validation
 
+### Milestone 5: Phase E - communication, privacy, adaptive attacks (v1.2)
+Status: Completed
+Objective: Measure communication cost, add update clipping and client-level DP, and test adaptive colluding attackers against every aggregator.
+Tasks:
+- [x] E0 housekeeping; E1 byte accounting per round
+- [x] E2 clipping + client-level DP with zCDP accountant
+- [x] E4 ALIE (z = 1, 3, 5) and Min-Max, 1 and 2 attackers x 4 aggregators, plus clipping in front of robust aggregation
+- [x] Dashboard page "Privacy & Attacks"
+- [x] Write-up (FINAL_REPORT 7.4 / 8, README, release notes)
+- E3 secure aggregation: dropped on purpose (only a protocol demo here; incompatible with FedMedian/Krum)
+- E5 OpenML replication: not done (needs refactoring and network access)
+Results: 53 scenarios x 5 seeds (`results/study_e/`). Clipping is a cheap defence against scaling attacks; client-level DP is impractical with 4 banks (eps ~13 -> PR-AUC 0.224); ALIE z=5 with 2 of 4 attackers breaks Krum on 2/5 seeds and median/trimmed mean on 1/5, FedAvg unaffected.
+
 ## Next Steps
-- Optional extensions (Phase E): differential privacy, secure aggregation, communication cost, real or public benchmark data, adaptive attackers.
+- Phase E done (v1.2). Remaining optional work: secure aggregation; DP at a usable scale; Phase E on the OpenML data (`real_data_study.py` needs refactoring onto the shared strategies, and network access to openml.org); optimisation-based adaptive attacks.
 
 ## Demo Readiness
 **Status:** READY
@@ -208,6 +221,7 @@ Track:
 - Streamlit cache state issues if files are modified during runtime.
 
 ## Change Log
+- 2026-11-27: Phase E (v1.2). Added ALIE z=5 scenarios (40 runs; existing runs re-checked bit-identical in the new environment), wrote the interpretation into FINAL_REPORT 7.4/8, README and release notes. Full suite: 84 passed, 1 skipped (opt-in Ray test).
 - 2026-11-08: Phases A-C (research-validity revision).
   - A: reconciled README, report, progress file, runbook, release notes with measured results; `scratch/` -> tracked `scripts/`.
   - B: fully seeded training and initialisation (repeat runs bit-identical); shared reference test pool for all scenarios; 5-seed study with mean +/- std and paired comparisons; Ray-free in-process runner verified equal to Flower/Ray.
@@ -273,6 +287,6 @@ Noise between seeds is larger than most differences in this table; do not rank r
 - **SHAP validation**: Completed. Verified that SHAP uses exactly the same input model and produces correctly dimensioned attribution matching the model prediction (model attribution, not causal). Human-readable explanation generation works.
 - **Robustness validation**: Completed. Robustness page now reads values from results/summary.jsonl (no hard-coded fallbacks) and shows the multi-seed table.
 - **Documentation validation**: Completed. All required documentation files (README, FINAL_PRODUCT_GUIDE, DEMO_RUNBOOK, DEMO_CHECKLIST, FINAL_PRODUCT_PLAN) are present and describe the current architecture.
-- **Final test count**: 48/48 tests passing (100%) after the 2026-11-08 revision.
+- **Final test count**: 84 passed, 1 skipped (opt-in Ray comparison, `RUN_RAY_TESTS=1`) after Phase E (2026-11-27).
 - **Final status**: FINAL PRODUCT READY
 

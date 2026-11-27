@@ -2,6 +2,7 @@ import numpy as np
 import flwr as fl
 from src.config import BANK_PROFILES
 from src.federated.local_training import train_local
+from src.federated.privacy_robustness import ADAPTIVE_ATTACKS
 from src.evaluation import evaluate_probs
 from src.model import FraudMLP, numpy_to_state, state_to_numpy, predict
 
@@ -71,6 +72,9 @@ class MaliciousFraudClient(FraudClient):
     * ``scale``     - sends its trained weights multiplied by -10 (original Exp 9 attack).
     * ``signflip``  - sends global + (-5) * (local - global): an amplified, reversed update.
     * ``labelflip`` - trains honestly but on inverted fraud labels (data poisoning).
+    * ``alie`` / ``minmax`` - adaptive attacks. The client trains honestly; the malicious update is
+      crafted on the server side from the round's honest updates (omniscient, colluding attacker),
+      see ``src/federated/privacy_robustness.py``.
     """
 
     SCALE = -10.0
@@ -83,6 +87,8 @@ class MaliciousFraudClient(FraudClient):
             return new_params, n, {"cid": self.cid}
 
         new_params, n = self._train(parameters, config)
+        if attack in ADAPTIVE_ATTACKS:
+            return new_params, n, {"cid": self.cid}
         if attack == "signflip":
             poisoned = [(g + self.FLIP_GAIN * (p - g)).astype(np.float32)
                         for g, p in zip(parameters, new_params)]
