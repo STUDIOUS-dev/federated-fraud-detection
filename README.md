@@ -28,6 +28,7 @@ I implemented and tested several core features throughout this project:
 - **CSV scoring**: upload engineered-feature transactions in the Transaction Analyzer and download scored results.
 - **Scoring API (FastAPI)**: `POST /score` returns fraud probability, risk level and optional SHAP explanation.
 - **Real-data study**: the same federated comparison on the public OpenML credit-card dataset, with its own dashboard page.
+- **Privacy, cost and adaptive attacks (Phase E)**: per-round communication accounting, update-norm clipping, client-level differential privacy (Gaussian noise with a zCDP ε accountant), and adaptive colluding attackers (ALIE, Min-Max) against every aggregator, with a "Privacy & Attacks" dashboard page.
 
 ## Architecture
 ```text
@@ -179,8 +180,8 @@ SHAP provides localized feature attribution, which allows the dashboard to gener
 ## Limitations
 - **Synthetic data** in the main study with a weak fraud signal and about 53 fraud cases in each test pool; per-bank results are very noisy.
 - **Simulated banks** on one machine; no real network latency or bandwidth measured.
-- **No Differential Privacy** and **no Secure Aggregation**; model updates could leak information (e.g. gradient inversion).
-- **Limited attacks:** three simple, non-adaptive poisoning attacks, at most 2 of 4 clients.
+- **No Secure Aggregation**: the server sees each bank's update. Client-level DP is implemented, but with only 4 banks any useful ε (below about 10) destroys accuracy, so the main results run without it and updates could still leak information (e.g. gradient inversion).
+- **Attacks:** three simple poisoning attacks plus two adaptive ones (ALIE, Min-Max), at most 2 of 4 clients. The adaptive attackers are assumed omniscient and colluding (worst case); stronger, optimisation-based attacks were not tried.
 - Only mild heterogeneity between banks, so null results for IID-ness and FedProx may not carry over to real data.
 - The real-data "banks" are a random, skewed partition of one public dataset (row order stands in for time), not separate institutions.
 - The API and CSV upload expect already-engineered features; raw transactions need the rolling customer/terminal history computed first.
@@ -189,4 +190,4 @@ SHAP provides localized feature attribution, which allows the dashboard to gener
 - Not a production system.
 
 ## Future Work
-Differential privacy and secure aggregation; adaptive and colluding attackers; raw-transaction feature pipeline for the API; communication-cost analysis.
+Secure aggregation (incompatible with FedMedian/Krum, so it needs a different robust-aggregation design); differential privacy with many more clients, or with privacy amplification by client sampling; repeating the Phase E experiments on the OpenML data; a raw-transaction feature pipeline for the API.

@@ -61,7 +61,7 @@ def privacy_table(sc):
 
 def attack_table(sc, k):
     rows = {}
-    for attack in ("alie", "alie_z3", "minmax"):
+    for attack in ("alie", "alie_z3", "alie_z5", "minmax"):
         row = {label: _fmt(sc.get(f"adaptive_{attack}_{k}_{a}")) for label, a in AGGS}
         if any(v != "n/a" for v in row.values()):
             rows[attack] = row

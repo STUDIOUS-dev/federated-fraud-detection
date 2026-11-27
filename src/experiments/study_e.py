@@ -26,6 +26,7 @@ DP_NOISE = (0.5, 1.0, 2.0, 4.0)
 ROUNDS = (1, 2, 3, 10)    # 5 rounds is the plain "fedavg" scenario
 ADAPTIVE = {"alie": {"attack": "alie", "alie_z": 1.0},
             "alie_z3": {"attack": "alie", "alie_z": 3.0},
+            "alie_z5": {"attack": "alie", "alie_z": 5.0},
             "minmax": {"attack": "minmax"}}
 
 

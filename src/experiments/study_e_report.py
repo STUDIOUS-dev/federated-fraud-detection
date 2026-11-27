@@ -26,7 +26,7 @@ def comparisons():
     c.append(("DP z=1.0, 10 rounds vs 5 rounds", "dp_z1.0_rounds10", "dp_z1.0"))
     c.append(("Scale attack: clip 0.5 vs plain FedAvg", "attack_scale_x1_fedavg_clip", "attack_scale_x1_fedavg"))
     c.append(("Scale attack + clip vs clean FedAvg", "attack_scale_x1_fedavg_clip", "fedavg"))
-    for name in ("alie", "alie_z3", "minmax"):
+    for name in ("alie", "alie_z3", "alie_z5", "minmax"):
         for k in ("x1", "x2"):
             for _, a in AGG_COLS:
                 c.append((f"{name} {k} vs clean, {a}", f"adaptive_{name}_{k}_{a}", "fedavg"))
@@ -118,7 +118,7 @@ def render(agg, runs):
     for k in ("x1", "x2"):
         L.append(f"**{'1 attacker (bank_d) of 4' if k == 'x1' else '2 colluding attackers (bank_c, bank_d) of 4'}**\n")
         rows = []
-        for name in ("alie", "alie_z3", "minmax"):
+        for name in ("alie", "alie_z3", "alie_z5", "minmax"):
             r, have = [name], False
             for _, a in AGG_COLS:
                 e = agg.get(f"adaptive_{name}_{k}_{a}")
@@ -137,7 +137,7 @@ def render(agg, runs):
         L.append(_table(rows, ["Aggregator", "No clipping", "Clip 0.5"]) + "\n")
     L.append("Threat model: the attackers are omniscient and colluding. In each round they see all honest updates "
              "and send one identical crafted update (the standard setting in which ALIE and Min-Max are evaluated). "
-             "`alie`: mean − z·std per coordinate (z = 1 or 3; the paper's formula gives z = 0 for 4 clients). "
+             "`alie`: mean − z·std per coordinate (z = 1, 3 or 5; the paper's formula gives z = 0 for 4 clients). "
              "`minmax`: mean + γ·(−std/‖std‖) with the largest γ that keeps the update no farther from any honest "
              "update than the honest updates are from each other.\n")
 
