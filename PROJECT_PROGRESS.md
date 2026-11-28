@@ -221,7 +221,7 @@ Results: 53 scenarios x 5 seeds (`results/study_e/`). Clipping is a cheap defenc
 - Streamlit cache state issues if files are modified during runtime.
 
 ## Change Log
-- 2026-11-28: E5 (v1.3). Phase E scenarios on the OpenML credit-card data with the shared strategies (24 scenarios x 5 seeds); `run_fl_inprocess` takes an optional `n_features`; write-up in FINAL_REPORT 7.5, README, release notes. Report (`report/`) updated with the synthetic Phase E results. Full suite: see Final test count.
+- 2026-11-28: E5 (v1.3). Phase E scenarios on the OpenML credit-card data with the shared strategies (24 scenarios x 5 seeds); `run_fl_inprocess` takes an optional `n_features`; write-up in FINAL_REPORT 7.5, README, release notes. Report (`report/`) updated with the synthetic Phase E results. Full suite: 87 passed, 1 skipped.
 - 2026-11-27: Phase E (v1.2). Added ALIE z=5 scenarios (40 runs; existing runs re-checked bit-identical in the new environment), wrote the interpretation into FINAL_REPORT 7.4/8, README and release notes. Full suite: 84 passed, 1 skipped (opt-in Ray test).
 - 2026-11-08: Phases A-C (research-validity revision).
   - A: reconciled README, report, progress file, runbook, release notes with measured results; `scratch/` -> tracked `scripts/`.
@@ -288,6 +288,6 @@ Noise between seeds is larger than most differences in this table; do not rank r
 - **SHAP validation**: Completed. Verified that SHAP uses exactly the same input model and produces correctly dimensioned attribution matching the model prediction (model attribution, not causal). Human-readable explanation generation works.
 - **Robustness validation**: Completed. Robustness page now reads values from results/summary.jsonl (no hard-coded fallbacks) and shows the multi-seed table.
 - **Documentation validation**: Completed. All required documentation files (README, FINAL_PRODUCT_GUIDE, DEMO_RUNBOOK, DEMO_CHECKLIST, FINAL_PRODUCT_PLAN) are present and describe the current architecture.
-- **Final test count**: 84 passed, 1 skipped (opt-in Ray comparison, `RUN_RAY_TESTS=1`) after Phase E (2026-11-27).
+- **Final test count**: 87 passed, 1 skipped (opt-in Ray comparison, `RUN_RAY_TESTS=1`) after E5 (2026-11-28).
 - **Final status**: FINAL PRODUCT READY
 
