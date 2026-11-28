@@ -1,7 +1,7 @@
 # Project Progress
 
 ## Project Status
-v1.2 - Phase E complete (communication cost, clipping, client-level DP, adaptive attacks; see `docs/PHASE_E_RESULTS.md` and section 7.4 of `docs/FINAL_REPORT.md`). Builds on v1.1, the research-validity revision (Phases A-C, `docs/STUDY_RESULTS.md`), whose results are unchanged.
+v1.3 - Phase E complete on synthetic and real data (communication cost, clipping, client-level DP, adaptive attacks; see `docs/PHASE_E_RESULTS.md`, `docs/REAL_DATA_PHASE_E_RESULTS.md` and sections 7.4-7.5 of `docs/FINAL_REPORT.md`). Builds on v1.1, the research-validity revision (Phases A-C, `docs/STUDY_RESULTS.md`), whose results are unchanged.
 
 ### Research Status
 Complete for the scope below. Headline results are 5-seed means; the ten original experiments are single-seed (seed 42) demonstrations.
@@ -186,11 +186,11 @@ Tasks:
 - [x] Dashboard page "Privacy & Attacks"
 - [x] Write-up (FINAL_REPORT 7.4 / 8, README, release notes)
 - E3 secure aggregation: dropped on purpose (only a protocol demo here; incompatible with FedMedian/Krum)
-- E5 OpenML replication: not done (needs refactoring and network access)
+- [x] E5 OpenML replication (v1.3): `src/experiments/real_data_e.py`, 24 scenarios x 5 seeds in `results/real_data_e/`, write-up in FINAL_REPORT 7.5
 Results: 53 scenarios x 5 seeds (`results/study_e/`). Clipping is a cheap defence against scaling attacks; client-level DP is impractical with 4 banks (eps ~13 -> PR-AUC 0.224); ALIE z=5 with 2 of 4 attackers breaks Krum on 2/5 seeds and median/trimmed mean on 1/5, FedAvg unaffected.
 
 ## Next Steps
-- Phase E done (v1.2). Remaining optional work: secure aggregation; DP at a usable scale; Phase E on the OpenML data (`real_data_study.py` needs refactoring onto the shared strategies, and network access to openml.org); optimisation-based adaptive attacks.
+- Phase E done on synthetic (v1.2) and real data (v1.3). Remaining optional work: secure aggregation; DP at a usable scale; optimisation-based adaptive attacks.
 
 ## Demo Readiness
 **Status:** READY
@@ -221,6 +221,7 @@ Results: 53 scenarios x 5 seeds (`results/study_e/`). Clipping is a cheap defenc
 - Streamlit cache state issues if files are modified during runtime.
 
 ## Change Log
+- 2026-11-28: E5 (v1.3). Phase E scenarios on the OpenML credit-card data with the shared strategies (24 scenarios x 5 seeds); `run_fl_inprocess` takes an optional `n_features`; write-up in FINAL_REPORT 7.5, README, release notes. Report (`report/`) updated with the synthetic Phase E results. Full suite: see Final test count.
 - 2026-11-27: Phase E (v1.2). Added ALIE z=5 scenarios (40 runs; existing runs re-checked bit-identical in the new environment), wrote the interpretation into FINAL_REPORT 7.4/8, README and release notes. Full suite: 84 passed, 1 skipped (opt-in Ray test).
 - 2026-11-08: Phases A-C (research-validity revision).
   - A: reconciled README, report, progress file, runbook, release notes with measured results; `scratch/` -> tracked `scripts/`.

@@ -195,6 +195,17 @@ Separate from the synthetic study; see [docs/REAL_DATA_RESULTS.md](docs/REAL_DAT
 
 The test split has only 75 frauds, so differences between healthy methods are within noise; the attack result is not.
 
+The Phase E scenarios were repeated on this data with the shared strategies (`python -m src.experiments.real_data_e --workers 4`; tables in [docs/REAL_DATA_PHASE_E_RESULTS.md](docs/REAL_DATA_PHASE_E_RESULTS.md)):
+
+| Setting (10 rounds) | PR-AUC |
+|---|---:|
+| FedAvg / + update clipping (C = 1.0) | 0.807 / 0.805 |
+| + client-level DP, ε ≈ 50 / 20 / 9 | 0.668 / 0.066 / 0.005 |
+| 1 scaling attacker: FedAvg / + clipping / FedMedian | 0.300 / 0.797 / 0.802 |
+| 2 adaptive (ALIE z=5) attackers: FedAvg / FedMedian / Krum | 0.803 / 0.791 / 0.406 |
+
+Same conclusions as on synthetic data: clipping or median aggregation stops the scaling attacker, client-level DP is impractical with four banks, and Krum is the aggregator that colluding ALIE attackers break (2 of 5 seeds collapse). Unlike the synthetic study, FedMedian held up here.
+
 ## Explainability
 SHAP provides localized feature attribution, which allows the dashboard to generate human-readable explanations of which transaction features contributed most to the model's fraud probability score. These are model attributions, not causal explanations.
 
@@ -211,4 +222,4 @@ SHAP provides localized feature attribution, which allows the dashboard to gener
 - Not a production system.
 
 ## Future Work
-Secure aggregation (incompatible with FedMedian/Krum, so it needs a different robust-aggregation design); differential privacy with many more clients, or with privacy amplification by client sampling; repeating the Phase E experiments on the OpenML data; a raw-transaction feature pipeline for the API.
+Secure aggregation (incompatible with FedMedian/Krum, so it needs a different robust-aggregation design); differential privacy with many more clients, or with privacy amplification by client sampling; stronger, optimisation-based adaptive attacks; a raw-transaction feature pipeline for the API.
