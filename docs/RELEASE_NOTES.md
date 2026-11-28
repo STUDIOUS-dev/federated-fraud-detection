@@ -1,5 +1,23 @@
 # Release Notes
 
+## v1.3.0 (E5: Phase E on the OpenML credit-card data)
+
+### Added
+- `src/experiments/real_data_e.py` (+ `real_data_e_report.py`): 24 Phase E scenarios × 5 seeds on the frozen real-data study's banks, using the shared clients and Tracked* strategies. Writes `results/real_data_e/` and `docs/REAL_DATA_PHASE_E_RESULTS.md`.
+- `run_fl_inprocess(..., n_features=None)` for data with a different feature count (default unchanged).
+- Tests on a tiny random dataset (`tests/test_real_data_e.py`); no download needed.
+
+### Findings
+- Baselines reproduce the earlier real-data check (FedAvg 0.807); federation beats isolation by +0.016 (5/5 seeds).
+- Clipping (C = 1.0) costs 0.002 and restores FedAvg under the scaling attacker (0.300 → 0.797); FedMedian gives 0.802.
+- Client-level DP is even more damaging than on synthetic data: ε ≈ 50 → 0.668, ε ≈ 20 → 0.066.
+- ALIE z = 5 with 2 of 4 attackers breaks Krum (0.406 ± 0.368; 2/5 seeds collapse); FedMedian (0.791) and FedAvg (0.803) hold.
+
+### Compatibility
+- The frozen real-data study (`results/real_data/`, `docs/REAL_DATA_RESULTS.md`) is unchanged.
+
+---
+
 ## v1.2.0 (Phase E: communication, privacy, adaptive attacks)
 
 ### Added
@@ -20,7 +38,7 @@
 - All new options default to off; v1.1 results (`results/exp*`, `results/study/`) are unchanged and were not regenerated.
 
 ### Still not covered
-- Secure aggregation; DP at a usable scale; Phase E on the OpenML data; optimisation-based adaptive attacks.
+- Secure aggregation; DP at a usable scale; optimisation-based adaptive attacks. (Phase E on the OpenML data: done in v1.3.0.)
 
 ---
 

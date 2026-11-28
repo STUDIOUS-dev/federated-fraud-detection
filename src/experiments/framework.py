@@ -138,7 +138,7 @@ def run_fl_core(cfg: Config, client_data: dict, global_test: tuple):
     return history, strategy, time.time() - start
 
 
-def run_fl_inprocess(cfg: Config, client_data: dict, global_test: tuple):
+def run_fl_inprocess(cfg: Config, client_data: dict, global_test: tuple, n_features: int | None = None):
     """Ray-free equivalent of run_fl_core for large sweeps.
 
     Drives the SAME clients and the SAME Tracked* strategies through the same fit -> aggregate ->
@@ -146,6 +146,7 @@ def run_fl_inprocess(cfg: Config, client_data: dict, global_test: tuple):
     tests/test_inprocess.py compares it against the Flower/Ray simulation (run with
     `RUN_RAY_TESTS=1 python -m pytest tests/test_inprocess.py -v`; needs `flwr[simulation]`). Returns (history_dict, strategy, seconds)
     where history_dict maps metric -> [(round, value), ...] (round 0 = initial model, as in Flower).
+    ``n_features`` defaults to the synthetic feature set; pass it for other data (e.g. the OpenML study).
     """
     from flwr.common import (Code, Status, FitRes, EvaluateRes, ndarrays_to_parameters,
                              parameters_to_ndarrays)
@@ -154,7 +155,7 @@ def run_fl_inprocess(cfg: Config, client_data: dict, global_test: tuple):
 
     assert cfg.fraction_fit == 1.0, "in-process runner models dropout via cfg.dropout_rate, not fraction_fit"
     seed_everything(cfg.seed)
-    n_features = len(BASE_FEATURES)
+    n_features = n_features or len(BASE_FEATURES)
     make = get_numpy_client_fn(client_data, cfg, n_features)
     strategy = get_strategy(cfg, global_test[0], global_test[1], n_features)
     ok = Status(Code.OK, "")

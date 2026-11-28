@@ -1,0 +1,2974 @@
+{
+  "scenarios": {
+    "central": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "central",
+      "overrides": {},
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.793219457865923,
+          "std": 0.01719166123812491,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9764113183445545,
+          "std": 0.0037015130662906215,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8933333333333333,
+          "std": 0.009428090415820616,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.17514347230407906,
+          "std": 0.022507105863839066,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.09724127968769661,
+          "std": 0.01360754374189957,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8933333333333333,
+          "std": 0.009428090415820616,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": 0.793219457865923,
+            "std": 0.01719166123812491,
+            "n": 5
+          },
+          "recall_at_fpr1": {
+            "mean": 0.8933333333333333,
+            "std": 0.009428090415820616,
+            "n": 5
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": 0.793219457865923,
+            "std": 0.01719166123812491,
+            "n": 5
+          },
+          "recall_at_fpr1": {
+            "mean": 0.8933333333333333,
+            "std": 0.009428090415820616,
+            "n": 5
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": 0.793219457865923,
+            "std": 0.01719166123812491,
+            "n": 5
+          },
+          "recall_at_fpr1": {
+            "mean": 0.8933333333333333,
+            "std": 0.009428090415820616,
+            "n": 5
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": 0.793219457865923,
+            "std": 0.01719166123812491,
+            "n": 5
+          },
+          "recall_at_fpr1": {
+            "mean": 0.8933333333333333,
+            "std": 0.009428090415820616,
+            "n": 5
+          }
+        }
+      }
+    },
+    "local": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "local",
+      "overrides": {},
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.7912542680090298,
+          "std": 0.006416292263332523,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9511299359549048,
+          "std": 0.00406600689665682,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8473333333333333,
+          "std": 0.007958224257542217,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.31394381225272144,
+          "std": 0.04974539977727116,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.20005670482891272,
+          "std": 0.039324317258186116,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8306666666666667,
+          "std": 0.008628119403696559,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": 0.784413289732673,
+            "std": 0.011502200988166027,
+            "n": 5
+          },
+          "recall_at_fpr1": {
+            "mean": 0.8426666666666666,
+            "std": 0.014605934866804447,
+            "n": 5
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": 0.7811374800988734,
+            "std": 0.012468737374927123,
+            "n": 5
+          },
+          "recall_at_fpr1": {
+            "mean": 0.8373333333333333,
+            "std": 0.01738453974720708,
+            "n": 5
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": 0.7938817598704755,
+            "std": 0.021282525749312737,
+            "n": 5
+          },
+          "recall_at_fpr1": {
+            "mean": 0.8560000000000001,
+            "std": 0.01115546702045436,
+            "n": 5
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": 0.8055845423340969,
+            "std": 0.012403160724238438,
+            "n": 5
+          },
+          "recall_at_fpr1": {
+            "mean": 0.8533333333333333,
+            "std": 0.013333333333333364,
+            "n": 5
+          }
+        }
+      }
+    },
+    "fedavg": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedavg"
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.8069455935993007,
+          "std": 0.0051552524172747295,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.973135186129227,
+          "std": 0.00782641578416655,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8666666666666668,
+          "std": 1.2412670766236366e-16,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.26014824806368614,
+          "std": 0.015947221562757033,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.15340843082894745,
+          "std": 0.011097302382078884,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8586666666666666,
+          "std": 0.007302967433402201,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "fedmedian_clean": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedmedian"
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.8075268393467547,
+          "std": 0.00672046227278173,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9828544775900763,
+          "std": 0.00469115667070756,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8773333333333333,
+          "std": 0.01115546702045432,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.17453764410717046,
+          "std": 0.027767882460126878,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.09713113484163735,
+          "std": 0.016873131447824926,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8773333333333333,
+          "std": 0.01115546702045432,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "krum_clean": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "krum"
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.7938817598704755,
+          "std": 0.021282525749312737,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9611456864778714,
+          "std": 0.0076442396707888565,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8560000000000001,
+          "std": 0.01115546702045436,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.23221288372924392,
+          "std": 0.06674653947405317,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.13621157772678721,
+          "std": 0.04476981461409926,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8506666666666668,
+          "std": 0.011155467020454371,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "fedavg_clip": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedavg",
+        "clip_norm": 1.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.8048290267029239,
+          "std": 0.004976987638433668,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9744378856329214,
+          "std": 0.010955260791126823,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8640000000000001,
+          "std": 0.01115546702045432,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.2257300853107956,
+          "std": 0.036358981656863784,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.13031495739266233,
+          "std": 0.023838494802195805,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8640000000000001,
+          "std": 0.01115546702045432,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "dp_z0.5": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedavg",
+        "clip_norm": 1.0,
+        "dp_noise_multiplier": 0.5
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.6684755159543261,
+          "std": 0.13157854092926963,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9432692179232515,
+          "std": 0.015599765558180585,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8133333333333335,
+          "std": 0.03399346342395191,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.05994084298565956,
+          "std": 0.044499908451784365,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.031738028109552535,
+          "std": 0.024934979454011432,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8639999999999999,
+          "std": 0.062111011727211264,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      },
+      "epsilon": 50.34854258770292
+    },
+    "dp_z1.0": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedavg",
+        "clip_norm": 1.0,
+        "dp_noise_multiplier": 1.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.06559457325700416,
+          "std": 0.07288238541389062,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.8747382471683629,
+          "std": 0.06527226116724644,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.15466666666666667,
+          "std": 0.3458451805199675,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.013018564482677747,
+          "std": 0.005536310783954076,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.006568679565327798,
+          "std": 0.002821738105625142,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8346666666666666,
+          "std": 0.07459520389706327,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      },
+      "epsilon": 20.17427129385146
+    },
+    "dp_z2.0": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedavg",
+        "clip_norm": 1.0,
+        "dp_noise_multiplier": 2.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.0051211022072614265,
+          "std": 0.004534471220955677,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.7340795846737098,
+          "std": 0.1457288792331643,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.0,
+          "std": 0.0,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.009047028670117724,
+          "std": 0.0072457402288988474,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.004563125560051466,
+          "std": 0.0036830776796239,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.7493333333333333,
+          "std": 0.1930802941783547,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      },
+      "epsilon": 8.83713564692573
+    },
+    "attack_scale_x1_fedavg": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedavg",
+        "attack": "scale",
+        "malicious_clients": [
+          0
+        ]
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.3003124786056098,
+          "std": 0.1409161924246683,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.885594365437915,
+          "std": 0.006959935258006593,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.7733333333333332,
+          "std": 0.013333333333333306,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.49656274072502776,
+          "std": 0.16137190145190322,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.3871717717303834,
+          "std": 0.18002096175598695,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.7733333333333332,
+          "std": 0.013333333333333306,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "attack_scale_x1_fedavg_clip": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedavg",
+        "attack": "scale",
+        "malicious_clients": [
+          0
+        ],
+        "clip_norm": 1.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.7972072761657147,
+          "std": 0.008069175386272536,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9756920679006921,
+          "std": 0.004672978198438429,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8586666666666668,
+          "std": 0.011925695879998857,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.2506962555672132,
+          "std": 0.12415453575159144,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.15291126455164514,
+          "std": 0.0835474995967536,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8560000000000001,
+          "std": 0.017384539747207082,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "attack_scale_x1_fedmedian": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedmedian",
+        "attack": "scale",
+        "malicious_clients": [
+          0
+        ]
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.8024002100327063,
+          "std": 0.010734430338691908,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9846221222189018,
+          "std": 0.004891036216019179,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8746666666666666,
+          "std": 0.011925695879998857,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.15757756771229461,
+          "std": 0.026903674179304976,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.08674397814259646,
+          "std": 0.01618854485237944,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8799999999999999,
+          "std": 0.009428090415820616,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_alie_x2_fedavg": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedavg",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "alie",
+        "alie_z": 1.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.8011974228277896,
+          "std": 0.006695930963758142,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9665955549305348,
+          "std": 0.006171130901075751,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8559999999999999,
+          "std": 0.017384539747207082,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.2942903908553774,
+          "std": 0.04549834813434689,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.17905482390118338,
+          "std": 0.03356481580270349,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8480000000000001,
+          "std": 0.015202339001321865,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_alie_x2_fedmedian": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedmedian",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "alie",
+        "alie_z": 1.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.7984037400393426,
+          "std": 0.010661776824553514,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9677055214723926,
+          "std": 0.012062122986731696,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8479999999999999,
+          "std": 0.011925695879998912,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.1473937298736914,
+          "std": 0.03761520074015522,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.08107675065191328,
+          "std": 0.022831815049413465,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8640000000000001,
+          "std": 0.021908902300206663,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_alie_x2_krum": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "krum",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "alie",
+        "alie_z": 1.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.7984037400393426,
+          "std": 0.010661776824553514,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9677055214723926,
+          "std": 0.012062122986731696,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8479999999999999,
+          "std": 0.011925695879998912,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.1473937298736914,
+          "std": 0.03761520074015522,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.08107675065191328,
+          "std": 0.022831815049413465,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8640000000000001,
+          "std": 0.021908902300206663,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_alie_z3_x2_fedavg": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedavg",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "alie",
+        "alie_z": 3.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.8039331537076168,
+          "std": 0.007252066261786037,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9670433901125624,
+          "std": 0.009461187155959243,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8506666666666666,
+          "std": 0.014605934866804463,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.20082369934522806,
+          "std": 0.06506502329530159,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.11552680640231539,
+          "std": 0.043585880040681674,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8533333333333333,
+          "std": 0.01885618083164129,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_alie_z3_x2_fedmedian": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedmedian",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "alie",
+        "alie_z": 3.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.7894197961953913,
+          "std": 0.02720077864961299,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9633461423523828,
+          "std": 0.006077626210576156,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8266666666666665,
+          "std": 0.02828427124746194,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.20545801964056465,
+          "std": 0.11631649888694437,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.12207754708446643,
+          "std": 0.07389121332955284,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8293333333333333,
+          "std": 0.03183289703016889,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_alie_z3_x2_krum": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "krum",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "alie",
+        "alie_z": 3.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.7931645717744527,
+          "std": 0.02920852113510788,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9534260786002662,
+          "std": 0.006054116290893564,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8373333333333333,
+          "std": 0.03699849846803098,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.22627663736057432,
+          "std": 0.1036059380120235,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.13528733413311994,
+          "std": 0.07315072820450667,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8373333333333333,
+          "std": 0.03699849846803098,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_alie_z5_x2_fedavg": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedavg",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "alie",
+        "alie_z": 5.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.8025734375448834,
+          "std": 0.012393672816591504,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.968866677213892,
+          "std": 0.008490983721230716,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8506666666666666,
+          "std": 0.011155467020454373,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.17416356232261215,
+          "std": 0.11506319516336515,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.1019130520709803,
+          "std": 0.07929560230733208,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8560000000000001,
+          "std": 0.017384539747207082,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_alie_z5_x2_fedmedian": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedmedian",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "alie",
+        "alie_z": 5.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.791327649413828,
+          "std": 0.02060915770738668,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9540532634872643,
+          "std": 0.008441209991874173,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8453333333333333,
+          "std": 0.020221001184137482,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.2668618645041085,
+          "std": 0.11081017260246964,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.16468710220561938,
+          "std": 0.08791130772429777,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8320000000000001,
+          "std": 0.02764858847110366,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_alie_z5_x2_krum": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "krum",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "alie",
+        "alie_z": 5.0
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.4059464486003182,
+          "std": 0.36846304996107065,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.8519822103468279,
+          "std": 0.0771359728327081,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.43200000000000005,
+          "std": 0.39582263143427704,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.25675715406375116,
+          "std": 0.34443993016052543,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.23712871521690423,
+          "std": 0.3212639157702096,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8453333333333333,
+          "std": 0.14865321314313315,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_minmax_x2_fedavg": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedavg",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "minmax"
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.8022811631552891,
+          "std": 0.008561189934096098,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9666522052490023,
+          "std": 0.005891958144530713,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8506666666666666,
+          "std": 0.011155467020454373,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.26528404783855375,
+          "std": 0.0642489443601365,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.15920670867118553,
+          "std": 0.04739421805327839,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8453333333333333,
+          "std": 0.011925695879998912,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_minmax_x2_fedmedian": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "fedmedian",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "minmax"
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.7984837025945064,
+          "std": 0.010918812530805382,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9688667240904483,
+          "std": 0.011385944599231706,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8373333333333335,
+          "std": 0.025647178748895126,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.13937872283687863,
+          "std": 0.016598255849944402,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.07592076109019955,
+          "std": 0.009856026543646005,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8613333333333333,
+          "std": 0.015202339001321851,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    },
+    "adaptive_minmax_x2_krum": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "kind": "fl",
+      "overrides": {
+        "aggregation": "krum",
+        "malicious_clients": [
+          2,
+          3
+        ],
+        "attack": "minmax"
+      },
+      "n_test_pos": 75,
+      "global": {
+        "pr_auc": {
+          "mean": 0.80796434042634,
+          "std": 0.007672644679470878,
+          "n": 5
+        },
+        "roc_auc": {
+          "mean": 0.9701001869202688,
+          "std": 0.008286269177576635,
+          "n": 5
+        },
+        "recall_at_fpr1": {
+          "mean": 0.8480000000000001,
+          "std": 0.015202339001321865,
+          "n": 5
+        },
+        "f1": {
+          "mean": 0.19979938902758798,
+          "std": 0.1426971233635699,
+          "n": 5
+        },
+        "precision": {
+          "mean": 0.12219512049674182,
+          "std": 0.10786734424519845,
+          "n": 5
+        },
+        "recall": {
+          "mean": 0.8533333333333333,
+          "std": 0.024944382578492942,
+          "n": 5
+        }
+      },
+      "per_bank": {
+        "bank_a": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_b": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_c": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        },
+        "bank_d": {
+          "pr_auc": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          },
+          "recall_at_fpr1": {
+            "mean": null,
+            "std": null,
+            "n": 0
+          }
+        }
+      }
+    }
+  },
+  "comparisons": [
+    {
+      "label": "Federation vs isolation",
+      "a": "fedavg",
+      "b": "local",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": 0.015691325590271022,
+      "std_diff": 0.009428066854461051,
+      "se": 0.004216359676597505,
+      "t": 3.7215339282756643,
+      "wins": 5
+    },
+    {
+      "label": "Federation vs isolation",
+      "a": "fedavg",
+      "b": "local",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": 0.01933333333333338,
+      "std_diff": 0.007958224257542217,
+      "se": 0.003559026084010438,
+      "t": 5.432197707173837,
+      "wins": 5
+    },
+    {
+      "label": "Federation vs pooling data",
+      "a": "fedavg",
+      "b": "central",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": 0.013726135733377842,
+      "std_diff": 0.018780820230545107,
+      "se": 0.008399038141740426,
+      "t": 1.634250910846983,
+      "wins": 4
+    },
+    {
+      "label": "Federation vs pooling data",
+      "a": "fedavg",
+      "b": "central",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.026666666666666616,
+      "std_diff": 0.009428090415820616,
+      "se": 0.004216370213557831,
+      "t": -6.324555320336759,
+      "wins": 0
+    },
+    {
+      "label": "FedMedian vs FedAvg (no attack)",
+      "a": "fedmedian_clean",
+      "b": "fedavg",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": 0.00058124574745404,
+      "std_diff": 0.00875026791791806,
+      "se": 0.003913238777160067,
+      "t": 0.14853316665635832,
+      "wins": 4
+    },
+    {
+      "label": "FedMedian vs FedAvg (no attack)",
+      "a": "fedmedian_clean",
+      "b": "fedavg",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": 0.010666666666666647,
+      "std_diff": 0.01115546702045432,
+      "se": 0.004988876515698579,
+      "t": 2.138089935299395,
+      "wins": 3
+    },
+    {
+      "label": "Krum vs FedAvg (no attack)",
+      "a": "krum_clean",
+      "b": "fedavg",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.013063833728825292,
+      "std_diff": 0.025607911141002214,
+      "se": 0.01145220601461103,
+      "t": -1.1407263991023304,
+      "wins": 2
+    },
+    {
+      "label": "Krum vs FedAvg (no attack)",
+      "a": "krum_clean",
+      "b": "fedavg",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.010666666666666668,
+      "std_diff": 0.01115546702045436,
+      "se": 0.004988876515698596,
+      "t": -2.138089935299392,
+      "wins": 0
+    },
+    {
+      "label": "Clipping vs no clipping",
+      "a": "fedavg_clip",
+      "b": "fedavg",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.002116566896376715,
+      "std_diff": 0.00144746125608229,
+      "se": 0.0006473243526794463,
+      "t": -3.26971615947351,
+      "wins": 0
+    },
+    {
+      "label": "Clipping vs no clipping",
+      "a": "fedavg_clip",
+      "b": "fedavg",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.002666666666666662,
+      "std_diff": 0.01115546702045432,
+      "se": 0.004988876515698579,
+      "t": -0.5345224838248488,
+      "wins": 1
+    },
+    {
+      "label": "DP z=0.5 vs clipping only (cost of noise)",
+      "a": "dp_z0.5",
+      "b": "fedavg_clip",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.13635351074859797,
+      "std_diff": 0.13005688925844885,
+      "se": 0.05816320906481077,
+      "t": -2.344325784993404,
+      "wins": 0
+    },
+    {
+      "label": "DP z=0.5 vs clipping only (cost of noise)",
+      "a": "dp_z0.5",
+      "b": "fedavg_clip",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.05066666666666668,
+      "std_diff": 0.027325202042558946,
+      "se": 0.01222020185321558,
+      "t": -4.146139914483854,
+      "wins": 0
+    },
+    {
+      "label": "DP z=1.0 vs clipping only (cost of noise)",
+      "a": "dp_z1.0",
+      "b": "fedavg_clip",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.7392344534459199,
+      "std_diff": 0.07020288739665097,
+      "se": 0.03139568568713496,
+      "t": -23.545733665846853,
+      "wins": 0
+    },
+    {
+      "label": "DP z=1.0 vs clipping only (cost of noise)",
+      "a": "dp_z1.0",
+      "b": "fedavg_clip",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.7093333333333334,
+      "std_diff": 0.34453188854186234,
+      "se": 0.154079344639197,
+      "t": -4.6036886708880935,
+      "wins": 0
+    },
+    {
+      "label": "DP z=2.0 vs clipping only (cost of noise)",
+      "a": "dp_z2.0",
+      "b": "fedavg_clip",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.7997079244956626,
+      "std_diff": 0.003970159378406672,
+      "se": 0.0017755092503251258,
+      "t": -450.41045229655805,
+      "wins": 0
+    },
+    {
+      "label": "DP z=2.0 vs clipping only (cost of noise)",
+      "a": "dp_z2.0",
+      "b": "fedavg_clip",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.8640000000000001,
+      "std_diff": 0.01115546702045432,
+      "se": 0.004988876515698579,
+      "t": -173.18528475925135,
+      "wins": 0
+    },
+    {
+      "label": "DP z=1.0 vs local-only",
+      "a": "dp_z1.0",
+      "b": "local",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.7256596947520255,
+      "std_diff": 0.0711392405320962,
+      "se": 0.03181443553949508,
+      "t": -22.80913310095277,
+      "wins": 0
+    },
+    {
+      "label": "DP z=1.0 vs local-only",
+      "a": "dp_z1.0",
+      "b": "local",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.6926666666666667,
+      "std_diff": 0.3481650311115245,
+      "se": 0.1557041353907396,
+      "t": -4.448608027837022,
+      "wins": 0
+    },
+    {
+      "label": "Scale attack: clipping vs plain FedAvg",
+      "a": "attack_scale_x1_fedavg_clip",
+      "b": "attack_scale_x1_fedavg",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": 0.49689479756010496,
+      "std_diff": 0.14307262387952463,
+      "se": 0.06398402254277535,
+      "t": 7.765919956469054,
+      "wins": 5
+    },
+    {
+      "label": "Scale attack: clipping vs plain FedAvg",
+      "a": "attack_scale_x1_fedavg_clip",
+      "b": "attack_scale_x1_fedavg",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": 0.0853333333333334,
+      "std_diff": 0.02231093404090864,
+      "se": 0.009977753031397158,
+      "t": 8.552359741197604,
+      "wins": 5
+    },
+    {
+      "label": "Scale attack + clipping vs clean FedAvg",
+      "a": "attack_scale_x1_fedavg_clip",
+      "b": "fedavg",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.009738317433585952,
+      "std_diff": 0.011277841768734944,
+      "se": 0.0050436041668755595,
+      "t": -1.9308250828927955,
+      "wins": 1
+    },
+    {
+      "label": "Scale attack + clipping vs clean FedAvg",
+      "a": "attack_scale_x1_fedavg_clip",
+      "b": "fedavg",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.007999999999999985,
+      "std_diff": 0.011925695879998857,
+      "se": 0.005333333333333324,
+      "t": -1.4999999999999998,
+      "wins": 1
+    },
+    {
+      "label": "Scale attack: FedMedian vs plain FedAvg",
+      "a": "attack_scale_x1_fedmedian",
+      "b": "attack_scale_x1_fedavg",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": 0.5020877314270965,
+      "std_diff": 0.13969492421820642,
+      "se": 0.062473469332718246,
+      "t": 8.036815255978524,
+      "wins": 5
+    },
+    {
+      "label": "Scale attack: FedMedian vs plain FedAvg",
+      "a": "attack_scale_x1_fedmedian",
+      "b": "attack_scale_x1_fedavg",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": 0.10133333333333336,
+      "std_diff": 0.02022100118413743,
+      "se": 0.009043106644167007,
+      "t": 11.205588667772206,
+      "wins": 5
+    },
+    {
+      "label": "ALIE z = 1, 2 attackers vs clean, fedavg",
+      "a": "adaptive_alie_x2_fedavg",
+      "b": "fedavg",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.005748170771511041,
+      "std_diff": 0.006889538797551035,
+      "se": 0.003081095416989255,
+      "t": -1.865625692672629,
+      "wins": 0
+    },
+    {
+      "label": "ALIE z = 1, 2 attackers vs clean, fedavg",
+      "a": "adaptive_alie_x2_fedavg",
+      "b": "fedavg",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.01066666666666669,
+      "std_diff": 0.017384539747207082,
+      "se": 0.0077746025264604085,
+      "t": -1.3719886811400723,
+      "wins": 1
+    },
+    {
+      "label": "ALIE z = 1, 2 attackers vs clean, fedmedian",
+      "a": "adaptive_alie_x2_fedmedian",
+      "b": "fedmedian_clean",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.00912309930741222,
+      "std_diff": 0.00478631217829614,
+      "se": 0.0021405038784410523,
+      "t": -4.262126968934368,
+      "wins": 0
+    },
+    {
+      "label": "ALIE z = 1, 2 attackers vs clean, fedmedian",
+      "a": "adaptive_alie_x2_fedmedian",
+      "b": "fedmedian_clean",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.029333333333333343,
+      "std_diff": 0.011155467020454333,
+      "se": 0.004988876515698585,
+      "t": -5.879747322073342,
+      "wins": 0
+    },
+    {
+      "label": "ALIE z = 1, 2 attackers vs clean, krum",
+      "a": "adaptive_alie_x2_krum",
+      "b": "krum_clean",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": 0.004521980168867112,
+      "std_diff": 0.015197589054736999,
+      "se": 0.00679656844409974,
+      "t": 0.665332837601709,
+      "wins": 3
+    },
+    {
+      "label": "ALIE z = 1, 2 attackers vs clean, krum",
+      "a": "adaptive_alie_x2_krum",
+      "b": "krum_clean",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.00800000000000003,
+      "std_diff": 0.015202339001321903,
+      "se": 0.006798692684790408,
+      "t": -1.1766968108291036,
+      "wins": 1
+    },
+    {
+      "label": "ALIE z = 3, 2 attackers vs clean, fedavg",
+      "a": "adaptive_alie_z3_x2_fedavg",
+      "b": "fedavg",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.003012439891684071,
+      "std_diff": 0.006581674863604298,
+      "se": 0.0029434144801641733,
+      "t": -1.0234507956609793,
+      "wins": 3
+    },
+    {
+      "label": "ALIE z = 3, 2 attackers vs clean, fedavg",
+      "a": "adaptive_alie_z3_x2_fedavg",
+      "b": "fedavg",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.016000000000000035,
+      "std_diff": 0.014605934866804463,
+      "se": 0.006531972647421822,
+      "t": -2.4494897427831783,
+      "wins": 0
+    },
+    {
+      "label": "ALIE z = 3, 2 attackers vs clean, fedmedian",
+      "a": "adaptive_alie_z3_x2_fedmedian",
+      "b": "fedmedian_clean",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.018107043151363578,
+      "std_diff": 0.030819633123156866,
+      "se": 0.013782958940996579,
+      "t": -1.3137268440599696,
+      "wins": 3
+    },
+    {
+      "label": "ALIE z = 3, 2 attackers vs clean, fedmedian",
+      "a": "adaptive_alie_z3_x2_fedmedian",
+      "b": "fedmedian_clean",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.05066666666666666,
+      "std_diff": 0.03699849846803097,
+      "se": 0.016546231527987815,
+      "t": -3.0621272632964436,
+      "wins": 0
+    },
+    {
+      "label": "ALIE z = 3, 2 attackers vs clean, krum",
+      "a": "adaptive_alie_z3_x2_krum",
+      "b": "krum_clean",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.0007171880960228361,
+      "std_diff": 0.041859380334991814,
+      "se": 0.01872008398501192,
+      "t": -0.03831115803738096,
+      "wins": 3
+    },
+    {
+      "label": "ALIE z = 3, 2 attackers vs clean, krum",
+      "a": "adaptive_alie_z3_x2_krum",
+      "b": "krum_clean",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.018666666666666675,
+      "std_diff": 0.02764858847110362,
+      "se": 0.012364824660660934,
+      "t": -1.509658824848139,
+      "wins": 0
+    },
+    {
+      "label": "ALIE z = 5, 2 attackers vs clean, fedavg",
+      "a": "adaptive_alie_z5_x2_fedavg",
+      "b": "fedavg",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.004372156054417276,
+      "std_diff": 0.015280460815189047,
+      "se": 0.006833629822056912,
+      "t": -0.6397999552602724,
+      "wins": 2
+    },
+    {
+      "label": "ALIE z = 5, 2 attackers vs clean, fedavg",
+      "a": "adaptive_alie_z5_x2_fedavg",
+      "b": "fedavg",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.016000000000000014,
+      "std_diff": 0.011155467020454371,
+      "se": 0.004988876515698602,
+      "t": -3.207134902949087,
+      "wins": 0
+    },
+    {
+      "label": "ALIE z = 5, 2 attackers vs clean, fedmedian",
+      "a": "adaptive_alie_z5_x2_fedmedian",
+      "b": "fedmedian_clean",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.016199189932926794,
+      "std_diff": 0.026356110095948192,
+      "se": 0.011786810759401732,
+      "t": -1.374348860229688,
+      "wins": 1
+    },
+    {
+      "label": "ALIE z = 5, 2 attackers vs clean, fedmedian",
+      "a": "adaptive_alie_z5_x2_fedmedian",
+      "b": "fedmedian_clean",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.03199999999999999,
+      "std_diff": 0.030695638488590228,
+      "se": 0.01372750685464933,
+      "t": -2.331086069657434,
+      "wins": 0
+    },
+    {
+      "label": "ALIE z = 5, 2 attackers vs clean, krum",
+      "a": "adaptive_alie_z5_x2_krum",
+      "b": "krum_clean",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.38793531127015723,
+      "std_diff": 0.36896469622957956,
+      "se": 0.16500602841338005,
+      "t": -2.3510372014911196,
+      "wins": 0
+    },
+    {
+      "label": "ALIE z = 5, 2 attackers vs clean, krum",
+      "a": "adaptive_alie_z5_x2_krum",
+      "b": "krum_clean",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.42400000000000004,
+      "std_diff": 0.38705727397031736,
+      "se": 0.1730972751566779,
+      "t": -2.4494897427831788,
+      "wins": 0
+    },
+    {
+      "label": "Min-Max, 2 attackers vs clean, fedavg",
+      "a": "adaptive_minmax_x2_fedavg",
+      "b": "fedavg",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.004664430444011746,
+      "std_diff": 0.009309752464028634,
+      "se": 0.004163447872652838,
+      "t": -1.1203287723738682,
+      "wins": 1
+    },
+    {
+      "label": "Min-Max, 2 attackers vs clean, fedavg",
+      "a": "adaptive_minmax_x2_fedavg",
+      "b": "fedavg",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.016000000000000014,
+      "std_diff": 0.011155467020454371,
+      "se": 0.004988876515698602,
+      "t": -3.207134902949087,
+      "wins": 0
+    },
+    {
+      "label": "Min-Max, 2 attackers vs clean, fedmedian",
+      "a": "adaptive_minmax_x2_fedmedian",
+      "b": "fedmedian_clean",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": -0.009043136752248415,
+      "std_diff": 0.008333713247744434,
+      "se": 0.0037269498653894196,
+      "t": -2.4264176012208094,
+      "wins": 0
+    },
+    {
+      "label": "Min-Max, 2 attackers vs clean, fedmedian",
+      "a": "adaptive_minmax_x2_fedmedian",
+      "b": "fedmedian_clean",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.039999999999999994,
+      "std_diff": 0.02494438257849294,
+      "se": 0.011155467020454338,
+      "t": -3.585685828003181,
+      "wins": 0
+    },
+    {
+      "label": "Min-Max, 2 attackers vs clean, krum",
+      "a": "adaptive_minmax_x2_krum",
+      "b": "krum_clean",
+      "metric": "pr_auc",
+      "n": 5,
+      "mean_diff": 0.014082580555864487,
+      "std_diff": 0.02306980995970795,
+      "se": 0.010317132659581731,
+      "t": 1.36497038668837,
+      "wins": 4
+    },
+    {
+      "label": "Min-Max, 2 attackers vs clean, krum",
+      "a": "adaptive_minmax_x2_krum",
+      "b": "krum_clean",
+      "metric": "recall_at_fpr1",
+      "n": 5,
+      "mean_diff": -0.008000000000000007,
+      "std_diff": 0.020221001184137513,
+      "se": 0.009043106644167043,
+      "t": -0.8846517369293817,
+      "wins": 2
+    }
+  ]
+}

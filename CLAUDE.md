@@ -24,6 +24,7 @@ python scripts/run_all_experiments.py --yes            # regenerate exp1-10 (Flo
 python -m src.experiments.study [--only REGEX]         # 38 scenarios x 5 seeds, resumable; writes results/study/ + docs/STUDY_RESULTS.md
 python -m src.experiments.study --report-only          # rebuild the report from results/study/runs.jsonl
 python -m src.experiments.study_e --workers 4          # Phase E (comm cost, clipping/DP, adaptive attacks); writes results/study_e/ + docs/PHASE_E_RESULTS.md
+python -m src.experiments.real_data_e --workers 4      # Phase E on OpenML creditcard (E5; downloads ~150 MB once to data/real/); writes results/real_data_e/ + docs/REAL_DATA_PHASE_E_RESULTS.md
 ```
 
 No linter is configured. `scripts/` holds helper/acceptance scripts. The local interpreter may have older packages than `requirements.txt` allows (NumPy 1.26 / torch 2.2 were seen); CI installs the latest, so check changes on a fresh venv before trusting a local pass. `scripts/backfill.py` is legacy and refuses to run without `--force`.
